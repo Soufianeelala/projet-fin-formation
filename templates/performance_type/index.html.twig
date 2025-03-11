@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PerformanceType index{% endblock %}
+
+{% block main %}
+    <h1>PerformanceType index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for performance_type in performance_types %}
+            <tr>
+                <td>{{ performance_type.id }}</td>
+                <td>{{ performance_type.nom }}</td>
+                <td>
+                    <a href="{{ path('app_performance_type_show', {'id': performance_type.id}) }}">show</a>
+                    <a href="{{ path('app_performance_type_edit', {'id': performance_type.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_performance_type_new') }}">Create new</a>
+{% endblock %}

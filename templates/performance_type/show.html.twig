@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PerformanceType{% endblock %}
+
+{% block main %}
+    <h1>PerformanceType</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ performance_type.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ performance_type.nom }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_performance_type_index') }}">back to list</a>
+
+    <a href="{{ path('app_performance_type_edit', {'id': performance_type.id}) }}">edit</a>
+
+    {{ include('performance_type/_delete_form.html.twig') }}
+{% endblock %}

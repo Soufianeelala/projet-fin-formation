@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier les images{% endblock %}
+
+{% block main %}
+    <h1>Modifier les images de {{ car.marque }} {{ car.modele }}</h1>
+
+    <h3>Images existantes :</h3>
+    <div class="image-gallery">
+        {% for image in car.images %}
+            <div class="image-container">
+                <img src="{{ asset(image.filePath) }}" alt="Image de {{ car.marque }}">
+                {# <img src="{{ asset('uploads/cars/' ~ image.filePath) }}" alt="Image de {{ car.marque }}"> #}
+
+                <form method="post" action="{{ path('app_car_delete_image', {'id': image.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image.id) }}">
+                    <button type="submit">Supprimer</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3>Ajouter des nouvelles images :</h3>
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'data-turbo': 'false'}}) }}
+    {{ form_widget(form) }}
+    <button type="submit">Modifier les images</button>
+{{ form_end(form) }}
+
+
+<a href="{{ path('app_car_index') }}">Terminer</a>
+
+
+<script>
+document.querySelector('form').addEventListener('submit', function() {
+    console.log("Formulaire soumis !");
+});
+</script>
+
+{% endblock %}

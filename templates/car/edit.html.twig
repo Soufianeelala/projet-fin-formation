@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la voiture{% endblock %}
+
+{% block main %}
+    <h1>Modifier {{ car.marque }} {{ car.modele }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Suivant</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_car_index') }}">Annuler</a>
+{% endblock %}

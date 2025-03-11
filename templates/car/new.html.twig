@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <h1>Ajouter une voiture</h1>
+
+    <form method="post">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Suivant</button>
+        {{ form_end(form) }}
+    </form>
+{% endblock %}

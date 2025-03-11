@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <h1>Ajouter des images pour {{ car.marque }}</h1>
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
+
+   {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+    {{ form_row(form.files) }}
+    <button type="submit">Ajouter des images</button>
+{{ form_end(form) }}
+
+    
+{% endblock %}

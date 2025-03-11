@@ -12,6 +12,37 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    <li><a href="{{ path('app_car_index') }}">Liste des voitures</a></li>
+                    <li><a href="{{ path('app_car_new') }}">Ajouter une voiture</a></li>
+                    <li><a href="{{ path('app_motorisation_type_index') }}">Types de motorisation</a></li>
+                    <li><a href="{{ path('app_motorisation_type_new') }}">Ajouter un type de motorisation</a></li>
+                    <li><a href="{{ path('app_performance_type_index') }}">Types de performance</a></li>
+                    <li><a href="{{ path('app_performance_type_new') }}">Ajouter un type de performance</a></li>
+                </ul>
+            </nav>
+
+            {% block header %}
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Se connecter</a>
+                    <a href="{{ path('app_register') }}">S'inscrire</a>
+                {% endif %}
+            {% endblock %}
+        </header>
+
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+
+        <footer>
+            {% block footer %}
+            {% endblock %}
+        </footer> 
+
     </body>
 </html>

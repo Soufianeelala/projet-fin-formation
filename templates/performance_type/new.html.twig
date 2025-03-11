@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New PerformanceType{% endblock %}
+
+{% block main %}
+    <h1>Create new PerformanceType</h1>
+
+    {{ include('performance_type/_form.html.twig') }}
+
+    <a href="{{ path('app_performance_type_index') }}">back to list</a>
+{% endblock %}
