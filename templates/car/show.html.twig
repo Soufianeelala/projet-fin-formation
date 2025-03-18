@@ -6,37 +6,83 @@
     <h1>Car</h1>
 
     <table class="table">
-        <tbody>
+        <body>
             <tr>
                <h3>Images :</h3>
-{% if car.images is not empty %}
-    {% for image in car.images %}
-        <img src="{{ asset(image.filePath) }}" alt="Car Image" width="200">
-    {% endfor %}
-{% else %}
-    <p>Aucune image disponible</p>
-{% endif %}
-
-
+               {% if car.images is not empty %}
+                   {% for image in car.images %}
+                       <img src="{{ asset(image.filePath) }}" alt="Car Image" width="200">
+                   {% endfor %}
+               {% else %}
+                   <p>Aucune image disponible</p>
+               {% endif %}
             </tr>
+            <tr>
+                <th>Contacter le Propriétaire</th>
+                <td>{{ car.user.email }}</td>
+            </tr>
+
             <tr>
                 <th>Marque</th>
                 <td>{{ car.marque }}</td>
             </tr>
             <tr>
-                <th>Modele</th>
+                <th>Modèle</th>
                 <td>{{ car.modele }}</td>
             </tr>
             <tr>
-                <th>Annee</th>
+                <th>Année</th>
                 <td>{{ car.annee }}</td>
             </tr>
-        </tbody>
+
+            <!-- Affichage de la catégorie -->
+            <tr>
+                <th>Catégorie</th>
+                <td>
+                    {% if car.categorie is not null %}
+                        {{ car.categorie.nom }}
+                    {% else %}
+                        Aucune catégorie définie
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- Affichage des motorisations -->
+            <tr>
+                <th>Motorisation(s)</th>
+                <td>
+                    {% if car.motorisationTypes is not empty %}
+                        {% for motorisation in car.motorisationTypes %}
+                            {{ motorisation.nom }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Aucune motorisation disponible
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- Affichage des performances -->
+            <tr>
+                <th>Performance(s)</th>
+                <td>
+                    {% if car.performanceTypes is not empty %}
+                        {% for performance in car.performanceTypes %}
+                            {{ performance.nom }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Aucune performance disponible
+                    {% endif %}
+                </td>
+            </tr>
+        </body>
     </table>
 
-    <a href="{{ path('app_car_index') }}">back to list</a>
+    <a href="{{ path('app_car_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_car_edit', {'id': car.id}) }}">edit</a>
-
-    {{ include('car/_delete_form.html.twig') }}
+    {# Boutons visibles seulement pour le créateur ou un admin #}
+    {% if app.user and (car.user == app.user or is_granted('ROLE_ADMIN')) %}
+        <a href="{{ path('app_car_edit', {'id': car.id}) }}">Modifier</a>
+        <a href="{{ path('app_car_edit_details', {'id': car.id}) }}" class="btn btn-warning">Modifier les motorisations et performances</a>
+        {{ include('car/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

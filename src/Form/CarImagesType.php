@@ -24,7 +24,7 @@ class CarImagesType extends AbstractType
             'constraints' => [
                 new All([  // ✅ Applique les contraintes à chaque fichier individuellement
                     new File([
-                        'maxSize' => '5M',
+                        'maxSize' => '10M',
                         'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
                         'mimeTypesMessage' => 'Veuillez uploader une image valide (JPG, PNG, WebP).',
                     ])

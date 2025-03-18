@@ -12,10 +12,10 @@
                 <th>Marque</th>
                 <th>Modele</th>
                 <th>Annee</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <body>
         {% for car in cars %}
             <tr>
                 <td>{{ car.id }}</td>
@@ -23,17 +23,24 @@
                 <td>{{ car.modele }}</td>
                 <td>{{ car.annee }}</td>
                 <td>
-                    <a href="{{ path('app_car_show', {'id': car.id}) }}">show</a>
-                    <a href="{{ path('app_car_edit', {'id': car.id}) }}">edit</a>
+                    <a href="{{ path('app_car_show', {'id': car.id}) }}">Show</a>
+                    
+                    {# Afficher le bouton Edit si l'utilisateur connecté est le créateur ou un admin #}
+                    {% if app.user and (car.user == app.user or is_granted('ROLE_ADMIN')) %}
+                        <a href="{{ path('app_car_edit', {'id': car.id}) }}">Edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">No records found</td>
             </tr>
         {% endfor %}
-        </tbody>
+        </body>
     </table>
 
-    <a href="{{ path('app_car_new') }}">Create new</a>
+    {# Afficher le bouton Create New seulement si l'utilisateur est connecté #}
+    {% if app.user %}
+        <a href="{{ path('app_car_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

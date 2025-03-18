@@ -37,14 +37,23 @@ class Car
     /**
      * @var Collection<int, PerformanceType>
      */
-    #[ORM\ManyToMany(targetEntity: PerformanceType::class, mappedBy: 'cars')]
+    #[ORM\ManyToMany(targetEntity: PerformanceType::class, mappedBy: 'cars', cascade: ['persist'])]
     private Collection $performanceTypes;
 
     /**
      * @var Collection<int, MotorisationType>
      */
-    #[ORM\ManyToMany(targetEntity: MotorisationType::class, mappedBy: 'cars')]
+    #[ORM\ManyToMany(targetEntity: MotorisationType::class, mappedBy: 'cars', cascade: ['persist'])]
     private Collection $motorisationTypes;
+
+    // #[ORM\ManyToOne(inversedBy: 'cars')]
+    // private ?User $user = null;
+    #[ORM\ManyToOne(inversedBy: 'cars', cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?User $user = null;
+    private ?User $owner = null;
+
+
 
     public function __construct()
     {
@@ -189,4 +198,27 @@ class Car
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+    public function getOwner(): ?User
+{
+    return $this->owner;
+}
+
+public function setOwner(?User $owner): static
+{
+    $this->owner = $owner;
+    return $this;
+}
+
 }

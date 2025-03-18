@@ -8,19 +8,19 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for performance_type in performance_types %}
             <tr>
-                <td>{{ performance_type.id }}</td>
                 <td>{{ performance_type.nom }}</td>
                 <td>
+                {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_performance_type_show', {'id': performance_type.id}) }}">show</a>
                     <a href="{{ path('app_performance_type_edit', {'id': performance_type.id}) }}">edit</a>
+                
+                {% endif %}
                 </td>
             </tr>
         {% else %}

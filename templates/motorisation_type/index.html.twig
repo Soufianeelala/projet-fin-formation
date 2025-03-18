@@ -8,19 +8,23 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
+            {% if is_granted('ROLE_ADMIN') %}
                 <th>actions</th>
+            {% endif %}
+            
             </tr>
         </thead>
         <tbody>
         {% for motorisation_type in motorisation_types %}
             <tr>
-                <td>{{ motorisation_type.id }}</td>
                 <td>{{ motorisation_type.nom }}</td>
                 <td>
+                {% if is_granted('ROLE_ADMIN') %}
+
                     <a href="{{ path('app_motorisation_type_show', {'id': motorisation_type.id}) }}">show</a>
                     <a href="{{ path('app_motorisation_type_edit', {'id': motorisation_type.id}) }}">edit</a>
+                {% endif %}
                 </td>
             </tr>
         {% else %}

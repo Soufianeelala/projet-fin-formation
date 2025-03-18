@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la motorisation et les performances{% endblock %}
+
+{% block main %}
+    <h1>Modifier les détails de {{ car.marque }} {{ car.modele }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-secondary">Retour</a>
+{% endblock %}

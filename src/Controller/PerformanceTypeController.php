@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Entity\PerformanceType;
 use App\Form\PerformanceTypeType;
-use App\Repository\PerformanceTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\PerformanceTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/performance/type')]
 final class PerformanceTypeController extends AbstractController{
@@ -50,6 +51,8 @@ final class PerformanceTypeController extends AbstractController{
     }
 
     #[Route('/{id}/edit', name: 'app_performance_type_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]  
+
     public function edit(Request $request, PerformanceType $performanceType, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PerformanceTypeType::class, $performanceType);
@@ -68,6 +71,7 @@ final class PerformanceTypeController extends AbstractController{
     }
 
     #[Route('/{id}', name: 'app_performance_type_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, PerformanceType $performanceType, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$performanceType->getId(), $request->getPayload()->getString('_token'))) {

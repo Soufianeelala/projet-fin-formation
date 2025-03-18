@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Entity\MotorisationType;
 use App\Form\MotorisationTypeType;
-use App\Repository\MotorisationTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\MotorisationTypeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/motorisation/type')]
 final class MotorisationTypeController extends AbstractController{
@@ -50,6 +51,7 @@ final class MotorisationTypeController extends AbstractController{
     }
 
     #[Route('/{id}/edit', name: 'app_motorisation_type_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, MotorisationType $motorisationType, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MotorisationTypeType::class, $motorisationType);
@@ -68,6 +70,7 @@ final class MotorisationTypeController extends AbstractController{
     }
 
     #[Route('/{id}', name: 'app_motorisation_type_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, MotorisationType $motorisationType, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$motorisationType->getId(), $request->getPayload()->getString('_token'))) {
