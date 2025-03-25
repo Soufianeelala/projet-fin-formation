@@ -6,10 +6,13 @@ use App\Entity\Car;
 use App\Entity\Image;
 use App\Form\CarType;
 use App\Form\CarImagesType;
+use App\Entity\PerformanceCar;
 use App\Entity\PerformanceType;
 use App\Entity\MotorisationType;
+use App\Form\PerformanceCarType;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +20,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 
 
 
@@ -32,14 +34,22 @@ final class CarController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_car_new', methods: ['GET', 'POST'])]
-public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $car = new Car();
-    $form = $this->createForm(CarType::class, $car);
-    $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
+
+
+
+
+
+ // Page 1 : Ajouter une voiture
+ #[Route('/new', name: 'app_car_new', methods: ['GET', 'POST'])]
+ public function new(Request $request, EntityManagerInterface $entityManager): Response
+ {
+     $car = new Car();
+     $form = $this->createForm(CarType::class, $car);
+     $form->handleRequest($request);
+
+    
+     if ($form->isSubmitted() && $form->isValid()) {
         // Associer l'utilisateur connecté à la voiture
         $user = $this->getUser();
         $car->setUser($user); // Assure-toi que l'entité Car a bien un champ user
@@ -57,77 +67,179 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
             }
         }
 
-        // Récupérer les types de performance depuis le formulaire
-        foreach ($car->getPerformanceTypes() as $performanceType) {
-            $existingPerformance = $entityManager->getRepository(PerformanceType::class)
-                ->findOneBy(['nom' => $performanceType->getNom()]);
+         
+         $entityManager->persist($car);
+         $entityManager->flush();
 
-            if (!$existingPerformance) {
-                $entityManager->persist($performanceType);
-            } else {
-                $car->removePerformanceType($performanceType);
-                $car->addPerformanceType($existingPerformance);
+         return $this->redirectToRoute('app_car_add_performance', ['id' => $car->getId()]);
+        }
+
+     return $this->render('car/new.html.twig', [
+         'car' => $car,
+         'form' => $form->createView(),
+     ]);
+ }
+
+
+// Page 2 : Ajouter des performances
+// src/Controller/CarController.php
+
+// #[Route('/{id}/add-performance', name: 'app_car_add_performance')]
+// public function addPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+// {
+//     // Récupérer tous les types de performance disponibles
+//     $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
+
+//     // Créer le formulaire
+//     $form = $this->createForm(PerformanceCarType::class, null, [
+//         'performance_types' => $performanceTypes,
+//     ]);
+
+//     $form->handleRequest($request);
+
+//     if ($form->isSubmitted() && $form->isValid()) {
+//         // Traiter les types de performance et les valeurs saisies
+//         foreach ($performanceTypes as $performanceType) {
+//             $checkboxField = 'performanceType_' . $performanceType->getId();
+//             $valueField = 'valeur' . $performanceType->getId();
+
+//             // Vérifier si la case est cochée
+//             if ($form->has($checkboxField) && $form->get($checkboxField)->getData()) {
+//                 $value = $form->has($valueField) ? $form->get($valueField)->getData() : null;
+
+//                 if (!empty($value)) {
+//                     // Créer un nouvel objet PerformanceCar
+//                     $performanceCar = new PerformanceCar();
+//                     $performanceCar->setCar($car);
+//                     $performanceCar->setPerformanceType($performanceType);
+//                     $performanceCar->setValeur($value);
+
+//                     $entityManager->persist($performanceCar);
+//                 }
+//             }
+//         }
+
+//         // Sauvegarder les performances
+//         $entityManager->flush();
+
+//         $this->addFlash('success', 'Performances ajoutées avec succès !');
+//         return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
+//     }
+
+//     return $this->render('car/add_performance.html.twig', [
+//         'car' => $car,
+//         'form' => $form->createView(),
+//     ]);
+// }
+
+#[Route('/{id}/add-performance', name: 'app_car_add_performance')]
+public function addPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Récupérer les types de performance
+    $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
+
+    // Créer le formulaire
+    $form = $this->createForm(PerformanceCarType::class, null, [
+        'performance_types' => $performanceTypes,
+    ]);
+
+    $form->handleRequest($request);
+
+    // Vérification si le formulaire est soumis et valide
+    if ($form->isSubmitted() && $form->isValid()) {
+        $data = $form->getData();  // Récupérer les données envoyées par le formulaire
+        
+        foreach ($performanceTypes as $performanceType) {
+            $performanceId = $performanceType->getId();
+            
+            // Vérifier si la performance a été sélectionnée
+            if ($form->get('performanceType_' . $performanceId)->getData()) {
+                // Si la performance est sélectionnée, on récupère la valeur associée
+                $value = $form->get('valeur_' . $performanceId)->getData();
+                
+                if ($value) {
+                    $performanceCar = new PerformanceCar();
+                    $performanceCar->setCar($car);
+                    $performanceCar->setPerformanceType($performanceType);
+                    $performanceCar->setValeur((string) $value);  // Conversion explicite en chaîne
+                    
+                    $entityManager->persist($performanceCar);
+                }
             }
         }
 
-        // Sauvegarde de la voiture
-        $entityManager->persist($car);
+        // Sauvegarder les performances dans la base de données
         $entityManager->flush();
-
+        
+        $this->addFlash('success', 'Performances ajoutées avec succès !');
         return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
     }
 
-    return $this->render('car/new.html.twig', [
+    // Si le formulaire n'est pas soumis ou valide, on affiche les erreurs
+    if (!$form->isSubmitted()) {
+        dump('Formulaire non soumis');
+        dump($request->request->all()); // Affiche tout ce qui est dans la requête POST
+    }
+
+    return $this->render('car/add_performance.html.twig', [
         'car' => $car,
-        'form' => $form,
+        'form' => $form->createView(),
+        'performance_types' => $performanceTypes,
     ]);
 }
 
 
-    #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
-    public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(CarImagesType::class);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $imageFiles = $form->get('files')->getData() ?? [];
 
-            if (count($imageFiles) > 3) {
-                $this->addFlash('error', 'Vous ne pouvez ajouter que 3 images maximum.');
-                return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
-            }
+ // Page 3 : Ajouter des images
+ #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
+ public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
+ {
+     $form = $this->createForm(CarImagesType::class);
+     $form->handleRequest($request);
 
-            foreach ($imageFiles as $file) {
-                if ($file instanceof UploadedFile) {
-                    $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-                    $file->move('uploads/cars', $fileName);
+     if ($form->isSubmitted() && $form->isValid()) {
+         $imageFiles = $form->get('files')->getData() ?? [];
 
-                    $image = new Image();
-                    $image->setFilePath('uploads/cars/' . $fileName);
-                    $image->setCar($car);
+         if (count($imageFiles) > 3) {
+             $this->addFlash('error', 'Vous ne pouvez ajouter que 3 images maximum.');
+             return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
+         }
 
-                    $entityManager->persist($image);
-                }
-            }
+         foreach ($imageFiles as $file) {
+             if ($file instanceof UploadedFile) {
+                 $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                 $file->move('uploads/cars', $fileName);
 
-            $entityManager->flush();
-            return $this->redirectToRoute('app_car_index');
+                 $image = new Image();
+                 $image->setFilePath('uploads/cars/' . $fileName);
+                 $image->setCar($car);
+
+                 $entityManager->persist($image);
+             }
+         }
+
+         $entityManager->flush();
+         return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
         }
 
-        return $this->render('car/add_images.html.twig', [
-            'car' => $car,
-            'form' => $form->createView(),
-        ]);
-    }
+     return $this->render('car/add_images.html.twig', [
+         'car' => $car,
+         'form' => $form->createView(),
+     ]);
+ }
 
-    #[Route('/{id}', name: 'app_car_show', methods: ['GET'])]
-    public function show(Car $car): Response
-    {
-        return $this->render('car/show.html.twig', [
-            'car' => $car,
-        ]);
-    }
+ 
+
+ // Afficher une voiture
+ #[Route('/{id}', name: 'app_car_show', methods: ['GET'])]
+ public function show(Car $car): Response
+ {
+     return $this->render('car/show.html.twig', [
+         'car' => $car,
+     ]);
+ }
+
 
     #[Route('/{id}/edit', name: 'app_car_edit', methods: ['GET', 'POST'])]
     public function edit(Car $car, Request $request, EntityManagerInterface $entityManager): Response

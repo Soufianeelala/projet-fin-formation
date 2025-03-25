@@ -3,10 +3,81 @@
 {% block main %}
     <h1>Ajouter une voiture</h1>
 
-    <form method="post">
+    <form method="post" action="{{ path('app_car_new') }}">
         {{ form_start(form) }}
-        {{ form_widget(form) }}
+
+        <div>
+            {{ form_label(form.marque) }}
+            {{ form_widget(form.marque) }}
+            {{ form_errors(form.marque) }}
+        </div>
+
+        <div>
+            {{ form_label(form.modele) }}
+            {{ form_widget(form.modele) }}
+            {{ form_errors(form.modele) }}
+        </div>
+
+        <div>
+            {{ form_label(form.annee) }}
+            {{ form_widget(form.annee) }}
+            {{ form_errors(form.annee) }}
+        </div>
+
+        <div>
+            {{ form_label(form.categorie) }}
+            {{ form_widget(form.categorie) }}
+            {{ form_errors(form.categorie) }}
+        </div>
+
+        {# <h3>Performances</h3>
+        <div id="performance-selection">
+            {{ form_widget(form.performanceTypes) }}
+            {{ form_errors(form.performanceTypes) }}
+        </div>
+
+        <h3>Valeurs des performances</h3>
+        <div id="performance-values">
+            <!-- Les valeurs générées dynamiquement avec JS vont ici -->
+        </div> #}
+
+        <div>
+            {{ form_label(form.motorisationTypes) }}
+            {{ form_widget(form.motorisationTypes) }}
+            {{ form_errors(form.motorisationTypes) }}
+        </div>
+
         <button type="submit">Suivant</button>
+
         {{ form_end(form) }}
     </form>
+
+    {# // <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let performanceSelection = document.querySelectorAll('#performance-selection input[type="checkbox"]');
+            let performanceValues = document.getElementById('performance-values');
+
+            performanceSelection.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        // Crée un champ de saisie pour la valeur de la performance
+                        let input = document.createElement('input');
+                        input.type = 'number';
+                        input.name = `car[performanceCars][${this.value}][valeur]`;
+                        input.placeholder = `Valeur pour ${this.dataset.label || 'Performance'}`;
+                        input.required = true;
+                        input.setAttribute('data-performance-id', this.value);
+                        performanceValues.appendChild(input);
+                    } else {
+                        // Supprime le champ de saisie si la case est décochée
+                        let inputToRemove = performanceValues.querySelector(`[data-performance-id="${this.value}"]`);
+                        if (inputToRemove) {
+                            inputToRemove.remove();
+                        }
+                    }
+                });
+            });
+        });
+  </script> #}
+
 {% endblock %}

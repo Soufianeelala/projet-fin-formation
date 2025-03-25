@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+<h1>Ajouter des performances pour {{ car.marque }} {{ car.modele }}</h1>
+
+{{ form_start(form, {'action': path('app_car_add_performance', {'id': car.id}), 'method': 'POST'}) }}
+    {{ form_widget(form) }}
+    <div id="performance-values"></div> <!-- Pour insérer dynamiquement les champs -->
+    <button type="submit">Ajouter Performance</button>
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let performanceSelection = document.querySelectorAll('[id^="performanceType_"]');
+    let performanceValues = document.getElementById('performance-values');
+
+    performanceSelection.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            const performanceId = this.id.replace('performanceType_', '');
+            
+            if (this.checked) {
+                let input = document.createElement('input');
+                input.type = 'number';
+                input.name = `performanceCar[valeur_${performanceId}]`; // Assure-toi que c'est bien dans le bon format
+                input.placeholder = `Valeur pour ${this.dataset.label || 'Performance'}`;
+                input.required = true;
+                input.setAttribute('data-performance-id', performanceId);
+                performanceValues.appendChild(input);
+            } else {
+                let inputToRemove = performanceValues.querySelector(`[data-performance-id="${performanceId}"]`);
+                if (inputToRemove) {
+                    inputToRemove.remove();
+                }
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

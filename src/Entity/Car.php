@@ -35,31 +35,28 @@ class Car
     private Collection $images;
 
     /**
-     * @var Collection<int, PerformanceType>
-     */
-    #[ORM\ManyToMany(targetEntity: PerformanceType::class, mappedBy: 'cars', cascade: ['persist'])]
-    private Collection $performanceTypes;
-
-    /**
      * @var Collection<int, MotorisationType>
      */
     #[ORM\ManyToMany(targetEntity: MotorisationType::class, mappedBy: 'cars', cascade: ['persist'])]
     private Collection $motorisationTypes;
 
-    // #[ORM\ManyToOne(inversedBy: 'cars')]
-    // private ?User $user = null;
     #[ORM\ManyToOne(inversedBy: 'cars', cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
+
     private ?User $owner = null;
 
-
+    /**
+     * @var Collection<int, PerformanceCar>
+     */
+    #[ORM\OneToMany(mappedBy: 'car', targetEntity: PerformanceCar::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $performanceCars;
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
-        $this->performanceTypes = new ArrayCollection();
         $this->motorisationTypes = new ArrayCollection();
+        $this->performanceCars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,7 +72,6 @@ class Car
     public function setMarque(string $marque): static
     {
         $this->marque = $marque;
-
         return $this;
     }
 
@@ -87,7 +83,6 @@ class Car
     public function setModele(string $modele): static
     {
         $this->modele = $modele;
-
         return $this;
     }
 
@@ -99,7 +94,6 @@ class Car
     public function setAnnee(int $annee): static
     {
         $this->annee = $annee;
-
         return $this;
     }
 
@@ -111,7 +105,6 @@ class Car
     public function setCategorie(?Categorie $categorie): static
     {
         $this->categorie = $categorie;
-
         return $this;
     }
 
@@ -129,46 +122,16 @@ class Car
             $this->images->add($image);
             $image->setCar($this);
         }
-
         return $this;
     }
 
     public function removeImage(Image $image): static
     {
         if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
             if ($image->getCar() === $this) {
                 $image->setCar(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, PerformanceType>
-     */
-    public function getPerformanceTypes(): Collection
-    {
-        return $this->performanceTypes;
-    }
-
-    public function addPerformanceType(PerformanceType $performanceType): static
-    {
-        if (!$this->performanceTypes->contains($performanceType)) {
-            $this->performanceTypes->add($performanceType);
-            $performanceType->addCar($this);
-        }
-
-        return $this;
-    }
-
-    public function removePerformanceType(PerformanceType $performanceType): static
-    {
-        if ($this->performanceTypes->removeElement($performanceType)) {
-            $performanceType->removeCar($this);
-        }
-
         return $this;
     }
 
@@ -186,7 +149,6 @@ class Car
             $this->motorisationTypes->add($motorisationType);
             $motorisationType->addCar($this);
         }
-
         return $this;
     }
 
@@ -195,7 +157,6 @@ class Car
         if ($this->motorisationTypes->removeElement($motorisationType)) {
             $motorisationType->removeCar($this);
         }
-
         return $this;
     }
 
@@ -207,18 +168,44 @@ class Car
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
+
     public function getOwner(): ?User
-{
-    return $this->owner;
-}
+    {
+        return $this->owner;
+    }
 
-public function setOwner(?User $owner): static
-{
-    $this->owner = $owner;
-    return $this;
-}
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+        return $this;
+    }
 
+    /**
+     * @return Collection<int, PerformanceCar>
+     */
+    public function getPerformanceCars(): Collection
+    {
+        return $this->performanceCars;
+    }
+
+    public function addPerformanceCar(PerformanceCar $performanceCar): static
+    {
+        if (!$this->performanceCars->contains($performanceCar)) {
+            $this->performanceCars->add($performanceCar);
+            $performanceCar->setCar($this);
+        }
+        return $this;
+    }
+
+    public function removePerformanceCar(PerformanceCar $performanceCar): static
+    {
+        if ($this->performanceCars->removeElement($performanceCar)) {
+            if ($performanceCar->getCar() === $this) {
+                $performanceCar->setCar(null);
+            }
+        }
+        return $this;
+    }
 }

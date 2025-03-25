@@ -62,18 +62,19 @@
             </tr>
 
             <!-- Affichage des performances -->
-            <tr>
-                <th>Performance(s)</th>
-                <td>
-                    {% if car.performanceTypes is not empty %}
-                        {% for performance in car.performanceTypes %}
-                            {{ performance.nom }}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        Aucune performance disponible
-                    {% endif %}
-                </td>
-            </tr>
+           <tr>
+    <th>Performance(s)</th>
+    <td>
+        {% if car.performanceCars is not empty %}
+            {% for performanceCar in car.performanceCars %}
+                            <p>{{ performanceCar.performanceType.nom }}: {{ performanceCar.valeur }}{% if not loop.last %}, {% endif %}</p>
+            {% endfor %}
+        {% else %}
+            Aucune performance disponible
+        {% endif %}
+    </td>
+</tr>
+
         </body>
     </table>
 
