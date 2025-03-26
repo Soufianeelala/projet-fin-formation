@@ -14,7 +14,7 @@ class Image
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false , onDelete: 'CASCADE')]
     private ?Car $car = null;
 
     #[ORM\Column(type: 'string', length: 255)]

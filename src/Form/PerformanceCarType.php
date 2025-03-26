@@ -25,6 +25,9 @@ class PerformanceCarType extends AbstractType
                 'label' => $performanceType->getNom(),
                 'required' => false,
                 'mapped' => false, // Ne pas mapper directement cette case à cocher sur l'entité
+                'attr' => [
+                    'data-label' => $performanceType->getNom()
+                ],
             ]);
     
             // Champ de texte pour saisir la valeur, visible seulement si la case est cochée

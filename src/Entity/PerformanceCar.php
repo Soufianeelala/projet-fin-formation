@@ -14,7 +14,7 @@ class PerformanceCar
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'performanceCars')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false , onDelete: 'CASCADE')]
     private ?Car $car = null;
 
     #[ORM\ManyToOne(inversedBy: 'performanceCars')]

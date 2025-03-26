@@ -1,41 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
+    <h1>Ajouter des performances pour {{ car.marque }} {{ car.modele }}</h1>
 
-<h1>Ajouter des performances pour {{ car.marque }} {{ car.modele }}</h1>
+    {{ form_start(form, {'action': path('app_car_add_performance', {'id': car.id}), 'method': 'POST'}) }}
+        {{ form_widget(form) }}
+        <div id="performance-values"></div> <!-- Pour insérer dynamiquement les champs -->
+        <button type="submit">Ajouter Performance</button>
+    {{ form_end(form) }}
 
-{{ form_start(form, {'action': path('app_car_add_performance', {'id': car.id}), 'method': 'POST'}) }}
-    {{ form_widget(form) }}
-    <div id="performance-values"></div> <!-- Pour insérer dynamiquement les champs -->
-    <button type="submit">Ajouter Performance</button>
-{{ form_end(form) }}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const performanceSelection = document.querySelectorAll('[id^="performanceType_"]');
+        const performanceValues = document.getElementById('performance-values');
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    let performanceSelection = document.querySelectorAll('[id^="performanceType_"]');
-    let performanceValues = document.getElementById('performance-values');
+        // Attache un événement 'change' à chaque case à cocher
+        performanceSelection.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const performanceId = this.id.replace('performanceType_', '');
+                const existingInput = performanceValues.querySelector(`[data-performance-id="${performanceId}"]`);
 
-    performanceSelection.forEach(function (checkbox) {
-        checkbox.addEventListener('change', function () {
-            const performanceId = this.id.replace('performanceType_', '');
-            
-            if (this.checked) {
-                let input = document.createElement('input');
-                input.type = 'number';
-                input.name = `performanceCar[valeur_${performanceId}]`; // Assure-toi que c'est bien dans le bon format
-                input.placeholder = `Valeur pour ${this.dataset.label || 'Performance'}`;
-                input.required = true;
-                input.setAttribute('data-performance-id', performanceId);
-                performanceValues.appendChild(input);
-            } else {
-                let inputToRemove = performanceValues.querySelector(`[data-performance-id="${performanceId}"]`);
-                if (inputToRemove) {
-                    inputToRemove.remove();
+                if (this.checked) {
+                    // Si le champ n'existe pas encore, on le crée
+                    if (!existingInput) {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.name = `performanceCar[valeur_${performanceId}]`;
+                        input.placeholder = `Valeur pour ${this.dataset.label || 'Performance'}`;
+                        input.required = true;
+                        input.setAttribute('data-performance-id', performanceId);
+
+                        // Animation pour une meilleure UX
+                        input.style.opacity = 0;
+                        input.style.transition = 'opacity 0.5s';
+                        performanceValues.appendChild(input);
+                        setTimeout(() => input.style.opacity = 1, 10);
+                    }
+                } else if (existingInput) {
+                    // Si la case est décochée, retire le champ avec animation
+                    existingInput.style.opacity = 0;
+                    setTimeout(() => existingInput.remove(), 500);
                 }
-            }
+            });
         });
     });
-});
-</script>
-
+    </script>
 {% endblock %}

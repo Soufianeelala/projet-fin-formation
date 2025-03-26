@@ -339,37 +339,62 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
     
         return $this->redirectToRoute('app_car_index');
     }
+   
     #[Route('/{id}/edit-details', name: 'app_car_edit_details', methods: ['GET', 'POST'])]
-public function editDetails(Car $car, Request $request, EntityManagerInterface $entityManager): Response
-{
-    $form = $this->createFormBuilder($car)
-        ->add('motorisationTypes', EntityType::class, [
-            'class' => MotorisationType::class,
-            'choice_label' => 'nom',
-            'multiple' => true,
-            'expanded' => true,
-            'by_reference' => false,
-        ])
-        ->add('performanceTypes', EntityType::class, [
-            'class' => PerformanceType::class,
-            'choice_label' => 'nom',
-            'multiple' => true,
-            'expanded' => true,
-            'by_reference' => false,
-        ])
-        ->getForm();
+    public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
+        $existingPerformances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
 
-    $form->handleRequest($request);
+        // Créer les données initiales
+        $data = [];
+        foreach ($performanceTypes as $performanceType) {
+            $existingPerformance = array_filter($existingPerformances, fn($pc) => $pc->getPerformanceType()->getId() === $performanceType->getId());
+            $data['performanceType_' . $performanceType->getId()] = !empty($existingPerformance);
+            $data['valeur_' . $performanceType->getId()] = $existingPerformance ? reset($existingPerformance)->getValeur() : null;
+        }
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->flush();
-        return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
+        // Créer et gérer le formulaire
+        $form = $this->createForm(PerformanceCarType::class, null, [
+            'performance_types' => $performanceTypes,
+            'data_class' => null, // Pour éviter l'erreur liée à l'attente d'une entité
+            'data' => $data
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($performanceTypes as $performanceType) {
+                $performanceId = $performanceType->getId();
+                $isChecked = $form->get('performanceType_' . $performanceId)->getData();
+                $value = $form->get('valeur_' . $performanceId)->getData();
+
+                $existingPerformance = array_filter($existingPerformances, fn($pc) => $pc->getPerformanceType()->getId() === $performanceId);
+
+                if ($isChecked) {
+                    if (empty($existingPerformance)) {
+                        $performanceCar = new PerformanceCar();
+                        $performanceCar->setCar($car);
+                        $performanceCar->setPerformanceType($performanceType);
+                        $performanceCar->setValeur((string) $value);
+                        $entityManager->persist($performanceCar);
+                    } else {
+                        $performanceCar = reset($existingPerformance);
+                        $performanceCar->setValeur((string) $value);
+                    }
+                } else if (!empty($existingPerformance)) {
+                    $entityManager->remove(reset($existingPerformance));
+                }
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Performances mises à jour avec succès !');
+            return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
+        }
+
+        return $this->render('car/edit_performance.html.twig', [
+            'car' => $car,
+            'form' => $form->createView(),
+            'performance_types' => $performanceTypes,
+        ]);
     }
-
-    return $this->render('car/edit_details.html.twig', [
-        'car' => $car,
-        'form' => $form->createView(),
-    ]);
-}
-
-}
+} 

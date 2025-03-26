@@ -40,9 +40,10 @@ class Car
     #[ORM\ManyToMany(targetEntity: MotorisationType::class, mappedBy: 'cars', cascade: ['persist'])]
     private Collection $motorisationTypes;
 
-    #[ORM\ManyToOne(inversedBy: 'cars', cascade: ['remove'])]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(inversedBy: 'cars')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'SET NULL')]
     private ?User $user = null;
+
 
     private ?User $owner = null;
 
