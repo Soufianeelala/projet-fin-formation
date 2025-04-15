@@ -41,8 +41,9 @@ class Car
     private Collection $motorisationTypes;
 
     #[ORM\ManyToOne(inversedBy: 'cars')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'SET NULL')]
-    private ?User $user = null;
+#[ORM\JoinColumn(nullable: false)]
+private ?User $user = null;
+
 
 
     private ?User $owner = null;
@@ -52,6 +53,9 @@ class Car
      */
     #[ORM\OneToMany(mappedBy: 'car', targetEntity: PerformanceCar::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $performanceCars;
+
+    #[ORM\Column(length: 255 , unique: true)]
+    private ?string $matricule = null;
 
     public function __construct()
     {
@@ -207,6 +211,18 @@ class Car
                 $performanceCar->setCar(null);
             }
         }
+        return $this;
+    }
+
+    public function getMatricule(): ?string
+    {
+        return $this->matricule;
+    }
+
+    public function setMatricule(string $matricule): static
+    {
+        $this->matricule = $matricule;
+
         return $this;
     }
 }

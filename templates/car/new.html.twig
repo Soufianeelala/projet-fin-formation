@@ -19,6 +19,13 @@
         </div>
 
         <div>
+        {{ form_label(form.matricule) }}
+        {{ form_widget(form.matricule) }}
+        {{ form_errors(form.matricule) }}
+        </div>
+
+
+        <div>
             {{ form_label(form.annee) }}
             {{ form_widget(form.annee) }}
             {{ form_errors(form.annee) }}

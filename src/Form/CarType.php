@@ -26,6 +26,10 @@ class CarType extends AbstractType
         $builder
             ->add('marque')
             ->add('modele')
+            ->add('matricule', TextType::class, [
+                'label' => 'Matricule',
+                'required' => true,
+            ])
             ->add('annee')
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
@@ -58,6 +62,7 @@ class CarType extends AbstractType
                 'multiple' => true,       // Permet la sélection multiple
                 'expanded' => true,       // Affiche les cases à cocher
                 'label' => 'Sélectionnez les motorisations',
+                'by_reference' => false,
             ]);
     }
 
