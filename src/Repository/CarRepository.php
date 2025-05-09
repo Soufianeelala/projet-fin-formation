@@ -16,28 +16,58 @@ class CarRepository extends ServiceEntityRepository
         parent::__construct($registry, Car::class);
     }
 
-//    /**
-//     * @return Car[] Returns an array of Car objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Fonction pour récupérer les voitures en fonction du filtre.
+     * @param string|null $filter Le filtre à appliquer.
+     * @param int|null $year L'année pour filtrer les voitures (si spécifié).
+     * @param string|null $marque La marque pour filtrer les voitures (si spécifiée).
+     * @return Car[] Retourne un tableau d'objets Car
+     */
+    public function findAllWithFilter(?string $filter, ?int $year = null, ?string $marque = null): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.images', 'i')
+            ->addSelect('i');
+    
+        // Filtre par année
+        if ($year !== null) {
+            $qb->andWhere('c.annee = :year')
+               ->setParameter('year', $year);
+        }
+    
+        // Filtre par marque
+        if ($marque !== null && $marque !== '') {
+            $qb->andWhere('c.marque = :marque')
+               ->setParameter('marque', $marque);
+        }
+    
+        // Tri des résultats
+        switch ($filter) {
+            case 'date_desc':
+                $qb->orderBy('c.annee', 'DESC');
+                break;
+            case 'date_asc':
+                $qb->orderBy('c.annee', 'ASC');
+                break;
+            default:
+                // Tri par défaut selon l'ID
+                $qb->orderBy('c.id', 'DESC');
+                break;
+        }
+    
+        return $qb->getQuery()->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Car
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * Récupérer les marques distinctes des voitures.
+     * @return string[] Retourne un tableau avec les marques distinctes sous forme de chaîne de caractères.
+     */
+    public function getDistinctMarques(): array
+    {
+        // Récupérer les marques distinctes sous forme de tableau simple
+        return $this->createQueryBuilder('c')
+            ->select('DISTINCT c.marque')  // Sélectionner les marques distinctes
+            ->getQuery()
+            ->getResult();
+    }
 }

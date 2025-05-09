@@ -1,11 +1,38 @@
+{# templates/motorisation_type/new.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}New MotorisationType{% endblock %}
+{% block title %}Créer un type de motorisation{% endblock %}
 
 {% block main %}
-    <h1>Create new MotorisationType</h1>
+<section class="motorisation-type-section">
+  <div class="motorisation-type-form-container">
+    <h2 class="motorisation-type-title">
+      <i class="fas fa-cogs"></i> Créer un type de motorisation
+    </h2>
 
-    {{ include('motorisation_type/_form.html.twig') }}
+    {{ form_start(form, {
+      attr: { class: 'motorisation-type-form' }
+    }) }}
 
-    <a href="{{ path('app_motorisation_type_index') }}">back to list</a>
+      <div class="form-group">
+        {{ form_row(form.nom, {
+          label: 'Nom du type',
+          attr: { placeholder: 'Entrez le nom de la motorisation' }
+        }) }}
+      </div>
+
+      {{ form_widget(form._token) }}
+
+      <button type="submit" class="submit-btn">
+        {{ button_label|default('Enregistrer') }}
+      </button>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_motorisation_type_index') }}"
+       class="create-btn">
+      ← Retour à la liste
+    </a>
+  </div>
+</section>
 {% endblock %}

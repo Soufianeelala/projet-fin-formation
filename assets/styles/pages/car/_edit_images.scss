@@ -1,0 +1,192 @@
+@use '../../base/variables' as v;
+@use '../../base/fonts' as f;
+
+.edit-images-section {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  font-family: f.$font-sans;
+}
+
+.edit-images-card {
+  width: 100%;
+  max-width: 1000px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.edit-images-header {
+  background: v.$primary-color;
+  color: v.$text-light;
+  padding: 1.5rem 2rem;
+
+  h1 {
+    margin: 0;
+    font-family: f.$font-serif;
+    color: v.$secondary-color;
+    justify-content: center;
+  }
+}
+
+.edit-images-gallery,
+.edit-images-upload {
+  padding: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.edit-images-gallery {
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: v.$text-dark;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    img {
+      display: block;
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .delete-form {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.5rem;
+      text-align: center;
+
+      button {
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        background-color: red;
+        color: white;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: rgb(95, 10, 10);
+        }
+      }
+    }
+  }
+
+  .no-images {
+    color: #888;
+    font-style: italic;
+  }
+}
+
+.edit-images-upload {
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: v.$text-dark;
+  }
+
+  .upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      input[type="file"] {
+        padding: 0.5rem;
+        border: 1px solid v.$primary-color;
+        border-radius: 4px;
+      }
+    }
+
+    button[type="submit"] {
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-align: center;
+      cursor: pointer;
+      background-color: v.$primary-color;
+      color: white;
+      transition: background-color 0.3s ease;
+      align-self: flex-end;
+
+      &:hover {
+        background-color:rgb(0, 174, 255);
+      }
+    }
+  }
+}
+
+.edit-images-footer {
+  padding: 1.5rem 2rem;
+  text-align: right;
+  background: #fafafa;
+
+  a.btn--link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: f.$font-sans;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background-color: transparent;
+    color: v.$primary-color;
+    border: 2px solid v.$primary-color;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    i {
+      font-size: 1rem;
+    }
+
+    &:hover {
+      background-color: v.$primary-color;
+      color: v.$text-light;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Responsive tweaks
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .edit-images-footer {
+    text-align: center;
+  }
+}

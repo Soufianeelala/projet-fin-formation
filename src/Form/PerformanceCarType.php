@@ -39,9 +39,9 @@ class PerformanceCarType extends AbstractType
         }
     
         // Ajouter le bouton de soumission
-        $builder->add('submit', SubmitType::class, [
-            'label' => 'Ajouter Performance',
-        ]);
+        // $builder->add('submit', SubmitType::class, [
+        //     'label' => 'Ajouter Performance',
+        // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

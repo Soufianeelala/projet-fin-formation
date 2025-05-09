@@ -1,23 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PerformanceType{% endblock %}
+{% block title %}Détail du type de performance{% endblock %}
 
 {% block main %}
-    <h1>PerformanceType</h1>
+  <section class="performance-type-show">
+    <h1 class="performance-type-show__title">Nom du type de performance : <span class="performance-type-show__name">{{ performance_type.nom }}</span></h1>
 
-    <table class="table">
-        <tbody>
-           
-            <tr>
-                <th>Nom</th>
-                <td>{{ performance_type.nom }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_performance_type_index') }}">back to list</a>
-
-    <a href="{{ path('app_performance_type_edit', {'id': performance_type.id}) }}">edit</a>
-
-    {{ include('performance_type/_delete_form.html.twig') }}
+    <div class="performance-type-show__actions">
+      <a href="{{ path('app_performance_type_index') }}" class="btn-backperformance">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+      </a>
+    </div>
+  </section>
 {% endblock %}

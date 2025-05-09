@@ -1,0 +1,82 @@
+// _slider.scss
+
+// ===== SLIDER =====
+.slider-container {
+    background-color: #e5e7eb  ;
+    position: relative;
+    width: 100%;
+    max-width: 1800px;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+    &:hover .slide img {
+      filter: brightness(0.9);
+    }
+  }
+  
+  .slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .slide {
+    width: 100%;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  
+    &.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+  
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+  
+  .prev,
+  .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 50%;
+    z-index: 10;
+  
+    &:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+  
+  .prev { left: 10px; }
+  .next { right: 10px; }
+  
+  .dots {
+    text-align: center;
+    margin-top: 10px;
+  
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background: #bbb;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+  
+      &.active {
+        background: #333;
+      }
+    }
+  }
+  

@@ -1,19 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit PerformanceType{% endblock %}
+{% block title %}Modifier un type de motorisation{% endblock %}
 
 {% block main %}
-    <h1>Edit PerformanceType</h1>
-        {% if is_granted('ROLE_ADMIN') %}
+<section class="motorisation-type-edit-section">
+  <div class="motorisation-type-edit-form-container">
+    <h2 class="motorisation-type-edit-title">Modifier un type de motorisation</h2>
 
-    {{ include('performance_type/_form.html.twig', {'button_label': 'Update'}) }}
-    {{ include('performance_type/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}
+      <div class="form-container">
+        {{ form_start(form) }}
+        <div class="form-group">
+          {{ form_row(form.nom, {
+            label: 'Nom du type',
+            attr: { placeholder: 'Entrez le nom' }
+          }) }}
+        </div>
+        <button class="btn-editmotorisation">{{ button_label|default('Mettre à jour') }}</button>
+        {{ form_end(form) }}
+      </div>
+
     {% else %}
-        <p>⚠️ Vous n'avez pas l'autorisation de modifier ce type de motorisation.</p>
+      <p class="warning-text">⚠️ Vous n'avez pas l'autorisation de modifier ce type de motorisation.</p>
     {% endif %}
 
-
-
-    <a href="{{ path('app_performance_type_index') }}">back to list</a>
+    <div class="back-link">
+      <a href="{{ path('app_motorisation_type_index') }}" class="btn-backmotorisation">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+      </a>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

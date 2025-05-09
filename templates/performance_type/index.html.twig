@@ -1,35 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PerformanceType index{% endblock %}
+{% block title %}Liste des types de performance{% endblock %}
 
 {% block main %}
-    <h1>PerformanceType index</h1>
+<section class="categorie-index">
+  <h1>Types de performance</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for performance_type in performance_types %}
-            <tr>
-                <td>{{ performance_type.nom }}</td>
-                <td>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_performance_type_show', {'id': performance_type.id}) }}">show</a>
-                    <a href="{{ path('app_performance_type_edit', {'id': performance_type.id}) }}">edit</a>
-                
-                {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  {% if is_granted('ROLE_ADMIN') %}
+    <div class="btn-wrapper">
+      <a href="{{ path('app_performance_type_new') }}" class="create-btncategorie">
+        <i class="fas fa-plus"></i> Créer un nouveau type
+      </a>
+    </div>
+  {% endif %}
 
-    <a href="{{ path('app_performance_type_new') }}">Create new</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        {% if is_granted('ROLE_ADMIN') %}
+          <th>Actions</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for perf in performance_types %}
+        <tr>
+          <td>{{ perf.nom }}</td>
+          {% if is_granted('ROLE_ADMIN') %}
+            <td class="actions">
+              <a href="{{ path('app_performance_type_show', {id: perf.id}) }}" class="btn-view">Voir</a>
+              <a href="{{ path('app_performance_type_edit', {id: perf.id}) }}" class="btn-edit">Éditer</a>
+{{ include('performance_type/_delete_form.html.twig', { 'performance_type': perf }) }}
+            </td>
+          {% endif %}
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="2" class="no-records">Aucun type trouvé</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
 {% endblock %}

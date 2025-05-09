@@ -1,94 +1,103 @@
+{# templates/car/show.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Car{% endblock %}
+{% block title %}Détails de {{ car.marque }} {{ car.modele }}{% endblock %}
 
 {% block main %}
-    <h1>Car</h1>
+<section class="car-show">
+  <div class="car-show__card">
+    {# ——— Galerie de 3 photos ——— #}
+    <div class="car-show__gallery">
+      {% for image in car.images|slice(0,3) %}
+        <div class="car-show__slide">
+          <img 
+            src="{{ asset(image.filePath) }}"
+            alt="{{ car.marque }} {{ car.modele }}"
+            class="js-thumb"
+          >
+        </div>
+      {% else %}
+        <div class="car-show__slide placeholder">
+          Aucune image
+        </div>
+      {% endfor %}
+    </div>
 
-    <table class="table">
-        <body>
-            <tr>
-               <h3>Images :</h3>
-               {% if car.images is not empty %}
-                   {% for image in car.images %}
-                       <img src="{{ asset(image.filePath) }}" alt="Car Image" width="200">
-                   {% endfor %}
-               {% else %}
-                   <p>Aucune image disponible</p>
-               {% endif %}
-            </tr>
-            <tr>
-                <th>Contacter le Propriétaire</th>
-                <td>{{ car.user.email }}</td>
-            </tr>
+    {# ——— Détails ——— #}
+    <div class="car-show__details">
+      <h2 class="car-show__title">{{ car.marque }} {{ car.modele }}</h2>
+      <dl class="car-show__list">
+        <div><dt><h4>Matricule</h4></dt><dd>{{ car.matricule }}</dd></div>
+        <div><dt><h4>Année</3></dt><dd>{{ car.annee }}</dd></div>
+        <div><dt><h4>Catégorie</h4></dt><dd>{{ car.categorie ? car.categorie.nom : '—' }}</dd></div>
+        <div><dt><h4>Motorisations</h4></dt>
+          <dd>{{ car.motorisationTypes|map(t => t.nom)|join(', ') ?: '—' }}</dd>
+        </div>
+        <div><dt><h4>Performances</h4></dt>
+          <dd>
+            <ul class="performance-list">
+              {% for pc in car.performanceCars %}
+                <li><strong>{{ pc.performanceType.nom }}:</strong> {{ pc.valeur }}</li>
+              {% else %}
+                <li>— Aucune performance</li>
+              {% endfor %}
+            </ul>
+          </dd>
+        </div>
+        <div><dt><h4>Propriétaire</h4></dt><dd>{{ car.user.email }}</dd></div>
+      </dl>
 
-            <tr>
-                <th>Marque</th>
-                <td>{{ car.marque }}</td>
-            </tr>
-            <tr>
-                <th>Modèle</th>
-                <td>{{ car.modele }}</td>
-            </tr>
-            <tr>
-            <th>Matricule</th>
-            <td>{{ car.matricule }}</td>
-            </tr>
-
-            <tr>
-                <th>Année</th>
-                <td>{{ car.annee }}</td>
-            </tr>
-
-            <!-- Affichage de la catégorie -->
-            <tr>
-                <th>Catégorie</th>
-                <td>
-                    {% if car.categorie is not null %}
-                        {{ car.categorie.nom }}
-                    {% else %}
-                        Aucune catégorie définie
-                    {% endif %}
-                </td>
-            </tr>
-
-            <!-- Affichage des motorisations -->
-            <tr>
-                <th>Motorisation(s)</th>
-                <td>
-                    {% if car.motorisationTypes is not empty %}
-                        {% for motorisation in car.motorisationTypes %}
-                            {{ motorisation.nom }}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        Aucune motorisation disponible
-                    {% endif %}
-                </td>
-            </tr>
-
-            <!-- Affichage des performances -->
-           <tr>
-    <th>Performance(s)</th>
-    <td>
-        {% if car.performanceCars is not empty %}
-            {% for performanceCar in car.performanceCars %}
-                            <p>{{ performanceCar.performanceType.nom }}: {{ performanceCar.valeur }}{% if not loop.last %}, {% endif %}</p>
-            {% endfor %}
-        {% else %}
-            Aucune performance disponible
+      <div class="car-show__actions">
+        <a href="{{ path('app_car_index') }}" class="btn create-btn">
+          ← Retour à la liste
+        </a>
+        {% if app.user and (car.user == app.user or is_granted('ROLE_ADMIN')) %}
+          <a href="{{ path('app_car_edit', {id: car.id}) }}" class="btn btn-edit">
+            <i class="fas fa-edit"></i> Modifier
+          </a>
+          {{ include('car/_delete_form.html.twig') }}
         {% endif %}
-    </td>
-</tr>
+      </div>
+    </div>
+  </div>
+</section>
 
-        </body>
-    </table>
+{# ——— Lightbox overlay ——— #}
+<div id="lightbox-overlay" style="
+  display:none;
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.8);
+  justify-content:center; align-items:center;
+  z-index:10000;
+">
+  <img id="lightbox-img" src="" alt="" style="
+    max-width:90%; max-height:90%;
+    border-radius:8px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+  ">
+</div>
+{% endblock %}
 
-    <a href="{{ path('app_car_index') }}">Retour à la liste</a>
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const overlay = document.getElementById('lightbox-overlay');
+      const lightboxImg = document.getElementById('lightbox-img');
 
-    {# Boutons visibles seulement pour le créateur ou un admin #}
-    {% if app.user and (car.user == app.user or is_granted('ROLE_ADMIN')) %}
-        <a href="{{ path('app_car_edit', {'id': car.id}) }}">Modifier</a>
-        <a href="{{ path('app_car_edit_details', {'id': car.id}) }}" class="btn btn-warning">Modifier les motorisations et performances</a>
-        {{ include('car/_delete_form.html.twig') }}
-    {% endif %}
+      document.querySelectorAll('.js-thumb').forEach(thumb => {
+        thumb.style.cursor = 'zoom-in';
+        thumb.addEventListener('click', () => {
+          lightboxImg.src = thumb.src;
+          lightboxImg.alt = thumb.alt;
+          overlay.style.display = 'flex';
+        });
+      });
+
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        lightboxImg.src = '';
+      });
+    });
+  </script>
 {% endblock %}

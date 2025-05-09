@@ -1,11 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New PerformanceType{% endblock %}
+{% block title %}Créer un type de performance{% endblock %}
 
 {% block main %}
-    <h1>Create new PerformanceType</h1>
+<section class="performance-type-section">
+  <div class="performance-type-form-container">
+    <h2 class="performance-type-title">
+      <i class="fas fa-tachometer-alt"></i> Créer un type de performance
+    </h2>
 
-    {{ include('performance_type/_form.html.twig') }}
+    {{ form_start(form, {
+      attr: { class: 'performance-type-form' }
+    }) }}
 
-    <a href="{{ path('app_performance_type_index') }}">back to list</a>
+      <div class="form-group">
+        {{ form_row(form.nom, {
+          label: 'Nom du type',
+          attr: { placeholder: 'Entrez le nom' }
+        }) }}
+      </div>
+
+      {{ form_widget(form._token) }}
+
+      <button type="submit" class="submit-btn">
+        {{ button_label|default('Enregistrer') }}
+      </button>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_performance_type_index') }}"
+       class="btn-backperformance">
+      ← Retour à la liste
+    </a>
+  </div>
+</section>
 {% endblock %}

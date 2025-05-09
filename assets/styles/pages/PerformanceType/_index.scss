@@ -1,0 +1,195 @@
+@use '../../base/variables' as v;
+@use '../../base/fonts' as f;
+@use 'sass:color';
+
+.categorie-index {
+  padding: 2rem;
+  font-family: f.$font-sans;
+  color: v.$text-dark;
+  background-color: v.$secondary-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    background-color: v.$primary-color;
+    text-align: center;
+    color: antiquewhite;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  .create-btncategorie {
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    background-color: #7ce735;
+    color: #212529;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: color.scale(#7ce735, $lightness: -10%);
+    }
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto 2rem auto;
+    max-width: 900px;
+    background-color: v.$light-bg;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    color: v.$text-dark;
+
+    thead {
+      background-color: v.$primary-color;
+      color: v.$text-light;
+    }
+
+    th,
+    td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+
+      a {
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+
+        &.btn-view {
+          background-color: rgb(23, 151, 211);
+          color: v.$text-light;
+        }
+
+        &.btn-edit {
+          background-color: #7ce735;
+          color: #212529;
+
+          &:hover {
+            background-color: color.adjust(#7ce735, $lightness: -10%);
+          }
+        }
+      }
+
+      form {
+        margin: 0;
+
+        button {
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          text-align: center;
+          cursor: pointer;
+          text-decoration: none;
+          transition: background-color 0.3s ease;
+          background-color: red;
+          color: white;
+          font-size: 0.85rem;
+          padding: 0.4rem 0.8rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+      }
+    }
+  }
+
+  .no-records {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+
+  // RESPONSIVE
+  @media (max-width: 768px) {
+    .categorie-index {
+      padding: 1rem;
+
+      h1 {
+        font-size: 1.4rem;
+        width: 100%;
+        padding: 0.5rem;
+      }
+
+      .create-btncategorie {
+        font-size: 0.95rem;
+        padding: 0.4rem 0.8rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .table {
+        font-size: 0.9rem;
+
+        th, td {
+          padding: 0.75rem;
+        }
+
+        .actions {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .categorie-index {
+      .table {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .create-btncategorie {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

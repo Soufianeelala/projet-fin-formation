@@ -1,13 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Categorie{% endblock %}
+{% block title %}Modifier une catégorie{% endblock %}
 
 {% block main %}
-    <h1>Edit Categorie</h1>
+<section class="motorisation-type-edit-section">
+  <div class="motorisation-type-edit-form-container">
+    <h2 class="motorisation-type-edit-title">Modifier une catégorie</h2>
 
-    {{ include('categorie/_form.html.twig', {'button_label': 'Update'}) }}
+    {% if is_granted('ROLE_ADMIN') %}
+      <div class="form-container">
+        {{ form_start(form) }}
+        <div class="form-group">
+          {{ form_label(form.nom) }}
+          {{ form_widget(form.nom) }}
+        </div>
+        <button class="btn-editmotorisation">{{ button_label|default('Mettre à jour') }}</button>
+        {{ form_end(form) }}
+      </div>
+    {% else %}
+      <p class="warning-text">⚠️ Vous n'avez pas l'autorisation de modifier cette catégorie.</p>
+    {% endif %}
 
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
-
-    {{ include('categorie/_delete_form.html.twig') }}
+    <div class="back-link">
+      <a href="{{ path('app_categorie_index') }}" class="btn-backmotorisation">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+      </a>
+    </div>
+  </div>
+</section>
 {% endblock %}

@@ -20,21 +20,31 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Component\DependencyInjection\Loader\Configurator\request;
 
 
 
 #[Route('/car')]
 final class CarController extends AbstractController
 {
-    #[Route(name: 'app_car_index', methods: ['GET'])]
-    public function index(CarRepository $carRepository): Response
-    {
+    #[Route( name: 'app_car_index', methods: ['GET'])]
+    public function index(CarRepository $carRepository, Request $request): Response
+    {  $filter = $request->query->get('filter');
+        $marque = $request->query->get('marque');
+        $year = $request->query->get('year'); // Si tu veux aussi un filtre par année
+    
+        // Récupérer les voitures filtrées
+        $cars = $carRepository->findAllWithFilter($filter, $year, $marque);
+    
+        // Récupérer les marques distinctes pour l'affichage du formulaire
+        $marques = $carRepository->getDistinctMarques();
+        
         return $this->render('car/index.html.twig', [
-            'cars' => $carRepository->findAll(),
+            'cars' => $cars,
+            'marques' => $marques, // Passer les marques uniques à la vue
         ]);
     }
-
-
+    
 
 
 

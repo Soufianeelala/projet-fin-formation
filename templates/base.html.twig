@@ -1,53 +1,124 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                    <li><a href="{{ path('app_car_index') }}">Liste des voitures</a></li>
-                    <li><a href="{{ path('app_car_new') }}">Ajouter une voiture</a></li>
-                    <li><a href="{{ path('app_motorisation_type_index') }}">Types de motorisation</a></li>
-                    <li><a href="{{ path('app_motorisation_type_new') }}">Ajouter un type de motorisation</a></li>
-                    <li><a href="{{ path('app_performance_type_index') }}">Types de performance</a></li>
-                    <li><a href="{{ path('app_performance_type_new') }}">Ajouter un type de performance</a></li>
-                    <li><a href="{{ path('app_categorie_new') }}">Ajouter un Catigorie</a></li>
-                    
-                    <li><a href="{{ path('app_categorie_index') }}">Types de catigorie</a></li>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+     {# … #}
+    {# Kit FontAwesome (ou lien CDN) #}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-…tonIntégrity…"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    {# … #}
+    {# CSS principal #}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {% block stylesheets %}{% endblock %}
 
+    {# Importmap pour tes modules JS #}
+    {{ importmap('app') }}
+</head>
 
-                </ul>
-            </nav>
+<body>
+    <!-- HEADER + BURGER + OVERLAY -->
+    <header>
+        <div class="logo">MyAuto</div>
 
-            {% block header %}
+        <div id="burger" class="burger">
+            <span></span><span></span><span></span>
+        </div>
+
+        <nav id="menu" class="menu">
+            <ul>
+                <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                <li><a href="{{ path('app_car_index') }}">Liste des voitures</a></li>
+                <li><a href="{{ path('app_car_new') }}">Ajouter une voiture</a></li>
+                <li><a href="{{ path('app_motorisation_type_index') }}">Types de motorisation</a></li>
+                <li><a href="{{ path('app_motorisation_type_new') }}">Ajouter un type de motorisation</a></li>
+                <li><a href="{{ path('app_performance_type_index') }}">Types de performance</a></li>
+                <li><a href="{{ path('app_performance_type_new') }}">Ajouter un type de performance</a></li>
+                <li><a href="{{ path('app_categorie_new') }}">Ajouter une Catégorie</a></li>
+                <li><a href="{{ path('app_categorie_index') }}">Types de catégorie</a></li>
+
                 {% if app.user %}
-                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
                 {% else %}
-                    <a href="{{ path('app_login') }}">Se connecter</a>
-                    <a href="{{ path('app_register') }}">S'inscrire</a>
+                    <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                    <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
                 {% endif %}
-            {% endblock %}
-        </header>
+            </ul>
+        </nav>
 
-        <main>
-            {% block main %}{% endblock %}
-        </main>
+        <div id="overlay" class="overlay"></div>
+    </header>
 
-        <footer>
-            {% block footer %}
-            {% endblock %}
-        </footer> 
+    <!-- SLIDER -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide active">
+                <img src="{{ asset('uploads/images/slide1.jpg') }}" alt="Voiture 1">
+            </div>
+            <div class="slide">
+                <img src="{{ asset('uploads/images/slide2.jpg') }}" alt="Voiture 2">
+            </div>
+            <div class="slide">
+                <img src="{{ asset('uploads/images/slide3.jpg') }}" alt="Voiture 3">
+            </div>
+        </div>
 
-    </body>
+        <button class="prev">&#10094;</button>
+        <button class="next">&#10095;</button>
+
+        <div class="dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+        </div>
+    </div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+
+   <!-- FOOTER -->
+<footer>
+  <div class="footer-logo">MYAUTO</div>
+  <div class="footer-nav">
+    <a href="{{ path('app_home') }}">Accueil</a>
+    <a href="#">À propos</a>
+    <a href="#">Services</a>
+    <a href="/contact">Contact</a>
+  </div>
+  <div class="footer-socials">
+    <a href="https://facebook.com" target="_blank">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://twitter.com" target="_blank">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://instagram.com" target="_blank">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://linkedin.com" target="_blank">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+  </div>
+  <div class="footer-info">
+    © 2025 MYAUTO. Tous droits réservés.
+  </div>
+</footer>
+
+
+
+    {# Tes scripts, deferred pour être sûrs que le DOM est prêt #}
+    {% block javascripts %}
+        <script src="{{ asset('js/slider-menu.js') }}" defer></script>
+    {% endblock %}
+</body>
+
 </html>

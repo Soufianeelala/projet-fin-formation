@@ -1,0 +1,102 @@
+@use "sass:color"; // Pour utiliser la fonction color.scale
+@use '../../base/variables' as v; 
+@use '../../base/fonts' as f;
+
+// === Styles ===
+.categorie-edit-section {
+  background-color: v.$secondary-color;
+  padding: 2rem;
+  margin: 2rem auto;
+  border-radius: 8px;
+  max-width: 800px;
+}
+
+.categorie-edit-form-container {
+  background: v.$light-bg;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.categorie-edit-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-family: f.$font-serif;
+  border-radius: 4px;
+  background-color: v.$primary-color;
+  color: v.$text-light;
+  padding: 0.5rem;
+}
+
+.form-container {
+//   background-color: v.$light-bg;
+background-color: #29479b;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.categorie-edit-form-container label {
+  font-weight: bold;
+}
+
+input[type="text"], input[type="email"], textarea, select {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 5px;
+  width: 100%;
+  font-family: f.$font-sans;
+}
+
+// Boutons "Mettre à jour" et "Retour"
+.btn-editcategorie,
+.btn-backcategorie {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-family: f.$font-sans;
+}
+
+.btn-editcategorie {
+  background-color: v.$secondary-color;
+  color: v.$text-dark;
+
+  &:hover {
+    background-color: color.scale(v.$secondary-color, $lightness: -10%);
+    transform: translateY(-2px);
+  }
+}
+
+.btn-backcategorie {
+  background-color: #6c757d;
+  color: v.$text-light;
+
+  &:hover {
+    background-color: color.scale(#6c757d, $lightness: -10%);
+    transform: translateY(-2px);
+  }
+}
+
+.back-link {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.warning-text {
+  color: #d9534f;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+}

@@ -1,11 +1,37 @@
+{# templates/categorie/new.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}New Categorie{% endblock %}
+{% block title %}Nouvelle catégorie{% endblock %}
 
 {% block main %}
-    <h1>Create new Categorie</h1>
+<section class="categorie-section">
+  <div class="categorie-form-container">
+    <h2 class="categorie-title">
+      <i class="fas fa-folder-plus"></i> Créer une nouvelle catégorie
+    </h2>
 
-    {{ include('categorie/_form.html.twig') }}
+    {{ form_start(form, {
+      attr: { class: 'categorie-form' }
+    }) }}
 
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
+      <div class="form-group">
+        {{ form_row(form.nom, {
+          label: 'Nom de la catégorie',
+          attr: { placeholder: 'Entrez le nom' }
+        }) }}
+      </div>
+
+      {{ form_widget(form._token) }}
+
+      <button type="submit" class="submit-btn">
+        {{ button_label|default('Enregistrer') }}
+      </button>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_categorie_index') }}" class="create-btn">
+      ← Retour à la liste
+    </a>
+  </div>
+</section>
 {% endblock %}

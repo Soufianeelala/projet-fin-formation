@@ -1,4 +1,10 @@
-<form method="post" action="{{ path('app_performance_type_delete', {'id': performance_type.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ performance_type.id) }}">
-    <button class="btn">Delete</button>
-</form>
+ <form method="post"
+            action="{{ path('app_performance_type_delete', {'id': performance_type.id}) }}"
+            onsubmit="return confirm('Êtes-vous sûr ?');"
+            class="inline-form">
+        <input type="hidden" name="_token"
+               value="{{ csrf_token('delete' ~ performance_type.id) }}">
+        <button type="submit" class="btn--danger">
+          <i class="fas fa-trash-alt"></i> Supprimer
+        </button>
+      </form>

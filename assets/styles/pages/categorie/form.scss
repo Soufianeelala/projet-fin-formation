@@ -1,0 +1,62 @@
+@use '../../base/variables' as v;
+@use '../../base/fonts' as f;
+
+.categorie-form-wrapper {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1e1e2f;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  color: #f0f0f0;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    label {
+      font-weight: 500;
+      font-family: f.$font-sans;
+    }
+
+    input[type='text'],
+    textarea {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      background-color: #2a2a3d;
+      border: 1px solid #444;
+      border-radius: 8px;
+      color: #fff;
+      font-family: f.$font-sans;
+      transition: all 0.3s ease;
+
+      &:focus {
+        border-color: v.$secondary-color;
+        outline: none;
+        box-shadow: 0 0 8px rgba(v.$secondary-color, 0.35);
+      }
+
+      &::placeholder {
+        color: #aaa;
+      }
+    }
+
+    .submit-btn {
+      padding: 0.8rem 1.5rem;
+      background-color: v.$primary-color;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: lighten(v.$primary-color, 8%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}

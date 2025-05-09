@@ -1,0 +1,174 @@
+@use '../../base/variables' as v;
+@use '../../base/fonts'     as f;
+
+// Container principal
+.car-edit-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem;
+  font-family: f.$font-sans;
+}
+
+// Carte du formulaire
+.car-edit-form-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  background: #fff;
+  padding: 2.5rem 2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  color: v.$text-dark;
+}
+
+// Titre flottant
+.car-edit-title {
+  position: absolute;
+  top: -1.2rem;
+  left: 2rem;
+  background: v.$primary-color;
+  color: v.$text-light;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: f.$font-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+// Styles du formulaire
+.car-edit-form {
+  margin-top: 1.5rem;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: v.$text-dark;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: f.$font-sans;
+      font-size: 1rem;
+      border: 1px solid v.$primary-color;
+      border-radius: 6px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+      &:focus {
+        border-color: v.$secondary-color;
+        box-shadow: 0 0 0 3px rgba(v.$secondary-color, 0.2);
+        outline: none;
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+  }
+
+  button[type="submit"] {
+    background-color: v.$secondary-color;
+    color: v.$text-light;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-family: f.$font-sans;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    align-self: flex-end;
+
+    &:hover {
+      background-color: v.$secondary-color;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Lien « Annuler » 
+.car-edit-cancel {
+  display: inline-block;
+  margin-top: 1rem;
+  color: v.$primary-color;
+  font-family: f.$font-sans;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+  background: 3px red;
+
+  &:hover {
+    color: v.$secondary-color;
+    transform: translateX(-4px);
+  }
+}
+
+// Bloc de sélection des motorisations
+.motorisation-options {
+  .group-label {
+    font-family: f.$font-sans;
+    font-weight: 600;
+    margin-bottom: .5rem;
+    display: block;
+    color: v.$text-dark;
+  }
+
+  .options-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+  }
+
+  .motorisation-option {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem 1rem;
+    border: 1px solid v.$primary-color;
+    border-radius: 6px;
+    font-family: f.$font-sans;
+    cursor: pointer;
+    transition: background-color .3s, border-color .3s;
+
+    input {
+      /* Style la checkbox personnalisée */
+      appearance: none;
+      width: 1rem;
+      height: 1rem;
+      border: 1px solid v.$primary-color;
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    input:checked {
+      background-color: greenyellow;
+      border-color: v.$secondary-color;
+    }
+
+    i {
+      color: v.$secondary-color;
+    }
+
+    &:hover {
+      background-color:v.$primary-color;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .car-edit-form {
+    .form-group { margin-bottom: 1rem; }
+    button[type="submit"] { width: 100%; }
+  }
+  .car-edit-cancel { display: block; text-align: center; }
+}

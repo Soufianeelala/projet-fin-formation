@@ -1,23 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Categorie{% endblock %}
+{% block title %}Détail de la catégorie{% endblock %}
 
 {% block main %}
-    <h1>Categorie</h1>
+  <section class="categorie-show">
+    <h1 class="categorie-show__title">Catégorie : <span class="categorie-show__name">{{ categorie.nom }}</span></h1>
+    
+    <div class="categorie-show__actions">
+      <a href="{{ path('app_categorie_index') }}" class="btn-backcategorie">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+      </a>
 
-    <table class="table">
-        <body>
-            <tr>
-                <th>Nom</th>
-                <td>{{ categorie.nom }}</td>
-            </tr>
-        </body>
-    </table>
-
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
-
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">edit</a>
-        {{ include('categorie/_delete_form.html.twig') }}
-    {% endif %}
+     
+    </div>
+  </section>
 {% endblock %}

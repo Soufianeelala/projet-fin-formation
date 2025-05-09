@@ -1,0 +1,99 @@
+@use '../base/variables' as v;
+@use '../base/fonts' as f;
+@use '../utils/mixins' as m;
+
+
+// @include m.form-wrapper('contact'); 
+
+// .formulaire {
+//   margin: 0;
+//   padding: 0;
+//   font-family: f.$font-sans;
+// //   background-color: v.$primary-color;
+//   color: v.$text-light;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   min-height: 100vh;
+//   position: relative;
+// }
+
+// .contact-container {
+//   background-color: v.$light-bg;
+//   width: 90%;
+//   max-width: 600px;
+//   padding: 2rem;
+//   border-radius: 15px;
+//   position: relative;
+//   color: v.$text-dark;
+//   margin: 0 20px;
+// }
+
+// .form-header {
+//   position: absolute;
+//   top: -15px;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   background-color: v.$primary-color;
+//   padding: 0.5rem 1.5rem;
+//   border-radius: 10px;
+//   color: v.$text-light;
+//   font-family: f.$font-serif;
+//   font-weight: 600;
+//   font-size: 1.2rem;
+//   text-align: center;
+// }
+
+// .contact-form {
+//   margin-top: 2.5rem;
+// }
+
+// .form-group {
+//   margin-bottom: 1.5rem;
+//   display: flex;
+//   flex-direction: column;
+
+//   label {
+//     margin-bottom: 0.5rem;
+//     font-size: 0.95rem;
+//     color: v.$text-dark;
+//   }
+
+//   input,
+//   textarea {
+//     padding: 0.75rem;
+//     border: 1px solid v.$primary-color;
+//     border-radius: 5px;
+//     font-size: 1rem;
+//     outline: none;
+//     font-family: f.$font-sans;
+
+//     &:focus {
+//       border-color: v.$secondary-color;
+//     }
+//   }
+
+//   textarea {
+//     height: 100px;
+//     resize: none;
+//   }
+// }
+
+// .submit-btn {
+//   background-color: v.$secondary-color;
+//   color: v.$text-light;
+//   padding: 0.75rem 1.5rem;
+//   border: none;
+//   border-radius: 5px;
+//   font-size: 1rem;
+//   cursor: pointer;
+//   display: block;
+//   margin: 0 auto;
+//   font-family: f.$font-sans;
+//   transition: background-color 0.3s ease;
+
+//   &:hover {
+//     background-color: darken(v.$secondary-color, 10%);
+//   }
+// }

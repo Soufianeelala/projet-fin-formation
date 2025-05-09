@@ -1,14 +1,78 @@
+{# templates/car/edit.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier la voiture{% endblock %}
+{% block title %}Modifier {{ car.marque }} {{ car.modele }}{% endblock %}
 
 {% block main %}
-    <h1>Modifier {{ car.marque }} {{ car.modele }}</h1>
+<section class="car-edit-section">
+  <div class="car-edit-form-container">
+    <h2 class="car-edit-title">
+      Modifier {{ car.marque }} {{ car.modele }}
+    </h2>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit">Suivant</button>
+    {{ form_start(form, { attr: { class: 'car-edit-form' } }) }}
+
+      <div class="form-group">
+        {{ form_label(form.marque) }}
+        {{ form_widget(form.marque, { attr: { placeholder: 'Marque' } }) }}
+        {{ form_errors(form.marque) }}
+      </div>
+
+      <div class="form-group">
+        {{ form_label(form.modele) }}
+        {{ form_widget(form.modele, { attr: { placeholder: 'Modèle' } }) }}
+        {{ form_errors(form.modele) }}
+      </div>
+
+      <div class="form-group">
+        {{ form_label(form.matricule) }}
+        {{ form_widget(form.matricule, { attr: { placeholder: 'Matricule' } }) }}
+        {{ form_errors(form.matricule) }}
+      </div>
+
+      <div class="form-group">
+        {{ form_label(form.annee) }}
+        {{ form_widget(form.annee, { attr: { placeholder: 'Année' } }) }}
+        {{ form_errors(form.annee) }}
+      </div>
+
+      <div class="form-group">
+        {{ form_label(form.categorie) }}
+        {{ form_widget(form.categorie) }}
+        {{ form_errors(form.categorie) }}
+      </div>
+
+      <div class="form-group motorisation-options">
+  <span class="group-label">{{ form_label(form.motorisationTypes) }}</span>
+  <div class="options-list">
+    {% for child in form.motorisationTypes %}
+      {# récupère le libellé de la checkbox #}
+      {% set label = child.vars.label %}
+
+      <label class="motorisation-option">
+        {{ form_widget(child) }}
+        {% if label matches '/essence/i' %}
+          <i class="fas fa-gas-pump"></i>
+        {% elseif label matches '/diesel/i' %}
+          <i class="fas fa-oil-can"></i>
+        {% elseif label matches '/(électrique|electrique)/i' %}
+          <i class="fas fa-bolt"></i>
+        {% else %}
+          <i class="fas fa-car-side"></i>
+        {% endif %}
+        {{ label }}
+      </label>
+    {% endfor %}
+  </div>
+  {{ form_errors(form.motorisationTypes) }}
+</div>
+
+
+      <button type="submit" class="submit-btn">Suivant</button>
+
     {{ form_end(form) }}
 
-    <a href="{{ path('app_car_index') }}">Annuler</a>
+    <a href="{{ path('app_car_index') }}" class="car-edit-cancel">← Annuler</a>
+  </div>
+</section>
 {% endblock %}

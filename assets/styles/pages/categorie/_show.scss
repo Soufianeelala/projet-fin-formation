@@ -1,0 +1,104 @@
+@use "sass:color";
+@use '../../base/variables' as v;
+@use '../../base/fonts' as f;
+
+.categorie-show {
+  background-color: v.$secondary-color;
+  padding: 2rem;
+  margin: 2rem auto;
+  border-radius: 8px;
+  max-width: 800px;
+  color: v.$text-dark;
+
+  &__title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-family: f.$font-serif;
+    margin-bottom: 2rem;
+    background-color: v.$primary-color;
+    color: v.$text-light;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  &__name {
+    color: #ffd700; // Jaune or
+    font-weight: bold;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+}
+
+// Boutons
+.btn-editcategorie,
+.btn-backcategorie,
+.btn-deletecategorie {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-family: f.$font-sans;
+}
+
+.btn-editcategorie {
+  background-color: #7ce735;
+  color: #212529;
+
+  &:hover {
+    background-color: color.adjust(#7ce735, $lightness: -10%);
+    transform: translateY(-2px);
+  }
+}
+
+.btn-backcategorie {
+  background-color: #6c757d;
+  color: v.$text-light;
+
+  &:hover {
+    background-color: color.scale(#6c757d, $lightness: -10%);
+    transform: translateY(-2px);
+  }
+}
+
+.btn-deletecategorie {
+  background-color: red;
+  color: white;
+
+  &:hover {
+    background-color: color.scale(red, $lightness: -10%);
+    transform: translateY(-2px);
+  }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .categorie-show__title {
+    font-size: 1.4rem;
+    padding: 0.75rem;
+  }
+
+  .categorie-show__actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn-editcategorie,
+  .btn-backcategorie,
+  .btn-deletecategorie {
+    width: 100%;
+    justify-content: center;
+  }
+}

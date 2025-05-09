@@ -1,0 +1,69 @@
+@use "sass:color";
+@use '../../base/variables' as v; 
+@use '../../base/fonts' as f;
+
+.performance-type-show {
+  background-color: v.$secondary-color;
+  padding: 2rem;
+  margin: 2rem auto;
+  border-radius: 8px;
+  max-width: 800px;
+  color: v.$text-dark;
+
+  &__title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-family: f.$font-serif;
+    margin-bottom: 2rem;
+    background-color: v.$primary-color;
+    color: v.$text-light;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+}
+.performance-type-show__name {
+  color:v.$secondary-color;
+  font-weight: bold;
+}
+
+
+.btn-backperformance {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-family: f.$font-sans;
+  background-color: #6c757d;
+  color: v.$text-light;
+
+  &:hover {
+    background-color: color.scale(#6c757d, $lightness: -10%);
+    transform: translateY(-2px);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .performance-type-show__actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    .btn-backperformance {
+      width: 60%;
+      justify-content: center;
+    }
+  }
+}

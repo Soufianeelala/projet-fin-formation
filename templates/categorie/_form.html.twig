@@ -1,4 +1,15 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<section class="categorie-section">
+  <div class="categorie-form-container">
+    <h2 class="categorie-title">Créer une nouvelle catégorie</h2>
+
+    {{ form_start(form, { attr: { class: 'categorie-form' } }) }}
+      <div class="form-group">
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+      </div>
+
+
+      <button type="submit" class="submit-btn">Créer la catégorie</button>
+    {{ form_end(form) }}
+  </div>
+</section>

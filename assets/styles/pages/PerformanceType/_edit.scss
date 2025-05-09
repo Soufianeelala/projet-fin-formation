@@ -1,0 +1,88 @@
+@use "sass:color";  
+@use '../../base/variables' as v; 
+@use '../../base/fonts' as f;    
+
+// === Styles ===
+.performance-type-edit-section {
+  background-color: v.$secondary-color; 
+  padding: 2rem;
+  margin: 2rem auto;
+  border-radius: 8px;
+  max-width: 800px;
+}
+
+.performance-type-edit-form-container {
+  background: v.$light-bg;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.performance-type-edit-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-family: f.$font-serif;
+  border-radius: 4px;
+  background-color: v.$primary-color; 
+  color: v.$text-light; 
+  padding: 0.5rem;
+}
+
+.performance-type-edit-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.performance-type-edit-form label {
+  font-weight: bold; 
+}
+
+.performance-type-edit__actions {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin-top: 2rem;
+  gap: 1rem; 
+}
+
+// Boutons "Mettre à jour" et "Retour"
+.btn-editperformance,
+.btn-backperformance {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-family: f.$font-sans; 
+  margin-top: 5px;
+}
+
+.btn-editperformance {
+  background-color: v.$secondary-color; 
+  color: v.$text-dark;
+
+  &:hover {
+    background-color: color.scale(v.$secondary-color, $lightness: -10%); 
+    transform: translateY(-2px); 
+  }
+}
+
+.btn-backperformance {
+  background-color: #6c757d; 
+  color: v.$text-light;
+
+  &:hover {
+    background-color: color.scale(#6c757d, $lightness: -10%); 
+    transform: translateY(-2px); 
+  }
+}
+
+.performance-type-delete {
+  margin-top: 2rem;
+  text-align: center;
+}

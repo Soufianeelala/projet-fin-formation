@@ -1,39 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier les images{% endblock %}
+{% block title %}Modifier les images de {{ car.marque }} {{ car.modele }}{% endblock %}
 
 {% block main %}
-    <h1>Modifier les images de {{ car.marque }} {{ car.modele }}</h1>
+<section class="edit-images-section">
+  <div class="edit-images-card">
+    <header class="edit-images-header">
+      <h1 class="edit-images-title">
+        Modifier les images de {{ car.marque }} {{ car.modele }}
+      </h1>
+    </header>
 
-    <h3>Images existantes :</h3>
-    <div class="image-gallery">
+    {# Galerie des images existantes #}
+    <div class="edit-images-gallery">
+      <h3>Images existantes</h3>
+      <div class="gallery-grid">
         {% for image in car.images %}
-            <div class="image-container">
-                <img src="{{ asset(image.filePath) }}" alt="Image de {{ car.marque }}">
-                {# <img src="{{ asset('uploads/cars/' ~ image.filePath) }}" alt="Image de {{ car.marque }}"> #}
-
-                <form method="post" action="{{ path('app_car_delete_image', {'id': image.id}) }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image.id) }}">
-                    <button type="submit">Supprimer</button>
-                </form>
-            </div>
+          <div class="gallery-item">
+            <img src="{{ asset(image.filePath) }}" alt="Image de {{ car.marque }}">
+            <form method="post"
+                  action="{{ path('app_car_delete_image', { id: image.id }) }}"
+                  class="delete-form">
+              <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ image.id) }}">
+              <button type="submit" class="btn btn--danger">Supprimer</button>
+            </form>
+          </div>
+        {% else %}
+          <p class="no-images">Aucune image disponible.</p>
         {% endfor %}
+      </div>
     </div>
 
-    <h3>Ajouter des nouvelles images :</h3>
-{{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'data-turbo': 'false'}}) }}
-    {{ form_widget(form) }}
-    <button type="submit">Modifier les images</button>
-{{ form_end(form) }}
+    {# Upload de nouvelles images #}
+    <div class="edit-images-upload">
+      <h3>Ajouter de nouvelles images</h3>
+      {{ form_start(form, {
+          attr: {
+            class: 'upload-form',
+            enctype: 'multipart/form-data',
+            'data-turbo': 'false'
+          }
+      }) }}
+        <div class="form-group">
+          {{ form_widget(form.files) }}
+          {{ form_errors(form.files) }}
+        </div>
+        <button type="submit" class="btn btn--primary">Mettre à jour</button>
+      {{ form_end(form) }}
+    </div>
 
-
-<a href="{{ path('app_car_index') }}">Terminer</a>
-
-
-<script>
-document.querySelector('form').addEventListener('submit', function() {
-    console.log("Formulaire soumis !");
-});
-</script>
-
+    <footer class="edit-images-footer">
+      <a href="{{ path('app_car_index') }}" class="btn btn--link">
+        ← Terminer et revenir à la liste
+      </a>
+    </footer>
+  </div>
+</section>
 {% endblock %}

@@ -1,23 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}MotorisationType{% endblock %}
+{% block title %}Détail du type de motorisation{% endblock %}
 
 {% block main %}
-    <h1>MotorisationType</h1>
+  <section class="motorisation-type-show">
+    <h1 class="motorisation-type-show__title">
+      Type de motorisation : <span class="motorisation-type-show__name">{{ motorisation_type.nom }}</span>
+    </h1>
 
-    <table class="table">
-        <tbody>
-           
-            <tr>
-                <th>Nom</th>
-                <td>{{ motorisation_type.nom }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_motorisation_type_index') }}">back to list</a>
-
-    <a href="{{ path('app_motorisation_type_edit', {'id': motorisation_type.id}) }}">edit</a>
-
-    {{ include('motorisation_type/_delete_form.html.twig') }}
+    <div class="motorisation-type-show__actions">
+      <a href="{{ path('app_motorisation_type_index') }}" class="btn-backmotorisation">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+      </a>
+    </div>
+  </section>
 {% endblock %}

@@ -1,0 +1,121 @@
+@use "sass:color";
+@use '../base/variables' as v;
+@use '../base/fonts' as f;
+@use '../utils/mixins' as m;
+
+.filter {
+    width: 60%;
+    margin: 20px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #2c3e50, #fdcb6e);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+
+    .filter-label {
+        font-family: "Calibri", sans-serif;
+        font-size: 18px;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .filter-select {
+        padding: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 300px;
+        cursor: pointer;
+        color: #555;
+
+        &:focus {
+            outline: none;
+            border-color: #fdcb6e;
+        }
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .filter-link {
+        font-family: "Calibri", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        padding: 12px 20px;
+        background: linear-gradient(145deg, #d35400, #e67e22);
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+    }
+
+    .filter-submit {
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: 700;
+        background-color: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+
+        &:hover {
+            background-color: #d35400;
+            transform: translateY(-3px);
+        }
+
+        &:active {
+            transform: translateY(1px);
+            background-color: #e67e22;
+        }
+
+        &:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        width: 90%;
+        padding: 15px;
+        
+        .filter-select, .filter-submit {
+            width: 100%;
+        }
+
+        .filter-buttons {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+}

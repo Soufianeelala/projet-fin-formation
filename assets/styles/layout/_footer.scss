@@ -1,0 +1,84 @@
+@use "sass:color";
+@use '../base/variables' as v;
+@use '../base/fonts' as f;
+
+footer {
+  background-color: v.$primary-color;
+  color: v.$text-light;
+  padding: 40px 20px;
+  font-family: f.$font-sans;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .footer-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: v.$secondary-color;
+    margin-bottom: 1rem;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+
+    a {
+      color: v.$text-light;
+      font-size: 16px;
+      transition: color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        color: v.$secondary-color;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 1.5rem;
+
+    a {
+      color: v.$text-light;
+      font-size: 20px;
+      transition: color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        color: v.$secondary-color;
+        transform: scale(1.05);
+      }
+
+      i {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .footer-info {
+    font-size: 14px;
+    color: color.scale(v.$text-light, $lightness: 20%);
+  }
+}
+
+@media (max-width: 600px) {
+  footer {
+    padding: 30px 15px;
+
+    .footer-nav {
+      flex-direction: column;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .footer-socials {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
