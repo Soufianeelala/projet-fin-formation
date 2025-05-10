@@ -1308,6 +1308,141 @@ header {
   }
 }
 
+.slogan-accueil {
+  background-image: url("/uploads/images/route.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+  font-family: "Lora", serif;
+  position: relative;
+  height: 500px;
+}
+.slogan-accueil::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(156, 141, 79, 0.6);
+  z-index: 1;
+}
+.slogan-accueil__title, .slogan-accueil__text {
+  position: relative;
+  z-index: 2;
+}
+.slogan-accueil__title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #FFD700;
+  font-weight: 600;
+}
+.slogan-accueil__text {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #f0f0f0;
+  font-family: "Inter", sans-serif;
+}
+
+.dernieres-voitures {
+  background-color: #d4af37;
+  padding: 60px 20px;
+  font-family: "Poppins", sans-serif;
+}
+.dernieres-voitures__title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #3E0018;
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+.dernieres-voitures__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+.dernieres-voitures__more {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.car-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 280px;
+  transition: transform 0.3s;
+  font-family: "Inter", sans-serif;
+}
+.car-card:hover {
+  transform: translateY(-8px);
+}
+.car-card__image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.car-card__noimage {
+  background-color: #ccc;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+}
+.car-card__info {
+  padding: 15px;
+  text-align: center;
+}
+.car-card__title {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #1f2937;
+  font-weight: 600;
+}
+.car-card__year {
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+}
+.btn--see-all {
+  background-color: #1f2937;
+  color: white;
+}
+.btn--see-all:hover {
+  background-color: #c9303e;
+}
+.btn--icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  background-color: #1f2937;
+  color: #f9fafb;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+.btn--icon i {
+  font-size: 1rem;
+}
+.btn--icon:hover {
+  background-color: #007bff;
+}
+
 .performance-form-wrapper {
   max-width: 700px;
   margin: 2rem auto;
@@ -1538,7 +1673,6 @@ header {
   display: flex;
   justify-content: center;
   /* === Galerie === */
-  /* On cible la classe .car-show__slide dans la galerie */
   /* === Détails === */
   /* === Actions === */
 }
@@ -1622,17 +1756,26 @@ header {
   gap: 1rem;
   flex-wrap: wrap;
   font-family: "Poppins", sans-serif;
+  /* === Modifier === */
+  /* === Supprimer === */
 }
-.car-show__actions a.btn.create-btn {
-  background: #d4af37;
-  color: #f9fafb;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+.car-show__actions a.btn.retour-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 5px;
+  font-weight: bold;
   text-decoration: none;
-  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  background-color: #6c757d;
+  color: #f9fafb;
 }
-.car-show__actions a.btn.create-btn:hover {
-  background-color: #dbd820;
+.car-show__actions a.btn.retour-btn:hover {
+  background-color: rgb(97.2, 105.3, 112.5);
   transform: translateY(-2px);
 }
 .car-show__actions a.btn.btn--icon {
@@ -1651,6 +1794,41 @@ header {
 .car-show__actions a.btn.btn--icon:hover {
   background: #1f2937;
   transform: translateY(-2px);
+}
+.car-show__actions a.btncarshow-edit {
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  background-color: #7ce735;
+  color: #212529;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.car-show__actions a.btncarshow-edit:hover {
+  background-color: rgb(97.9424778761, 208.2566371681, 24.7433628319);
+}
+.car-show__actions form {
+  margin: 0;
+}
+.car-show__actions form button.btncarshow-delete {
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  background-color: red;
+  color: white;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.car-show__actions form button.btncarshow-delete:hover {
+  background-color: #cc0000;
 }
 
 .car-edit-section {
@@ -1722,33 +1900,42 @@ header {
   resize: vertical;
 }
 .car-edit-form button[type=submit] {
-  background-color: #d4af37;
-  color: #f9fafb;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  font-family: "Poppins", sans-serif;
+  display: block;
+  margin: 2rem auto 0 auto;
+  background-color: #1f2937;
+  color: #fff;
+  padding: 0.9rem 1.5rem;
   font-size: 1rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  align-self: flex-end;
 }
 .car-edit-form button[type=submit]:hover {
   background-color: #d4af37;
-  transform: translateY(-2px);
+  transform: scale(1.02);
 }
 
 .car-edit-cancel {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.2rem;
+  background-color: transparent;
   color: #1f2937;
   font-family: "Poppins", sans-serif;
+  border: 2px solid #1f2937;
+  border-radius: 0.5rem;
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.2s ease;
-  background: 3px red;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background-color: red;
 }
 .car-edit-cancel:hover {
-  color: #d4af37;
+  color: #fff;
+  background-color: red;
+  border-color: #d4af37;
   transform: translateX(-4px);
 }
 
@@ -1794,6 +1981,18 @@ header {
 }
 .motorisation-options .motorisation-option:hover {
   background-color: #1f2937;
+}
+
+.edit-performance-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.edit-performance-link:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 600px) {
@@ -1973,6 +2172,138 @@ header {
     text-align: center;
   }
 }
+.performance-section {
+  padding: 3rem 1.5rem;
+  background-color: #d4af37;
+}
+.performance-section .performance-form-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.performance-section .form-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #d4af37;
+  background-color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 0.6rem;
+}
+.performance-section .form-title i {
+  color: #007bff;
+}
+.performance-section .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+.performance-section .form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+.performance-section .form-group input,
+.performance-section .form-group select,
+.performance-section .form-group textarea {
+  padding: 0.7rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+.performance-section .form-group input:focus,
+.performance-section .form-group select:focus,
+.performance-section .form-group textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+.performance-section .form-group .form-error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+.performance-section .performance-options .options-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.performance-section .performance-options .options-list .performance-option {
+  background: #f1f1f1;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: background 0.3s;
+}
+.performance-section .performance-options .options-list .performance-option label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.performance-section .performance-options .options-list .performance-option:hover {
+  background: #e4e4e4;
+}
+.performance-section .performance-values {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.performance-section .performance-values .performance-input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+.performance-section .performance-values .performance-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+.performance-section .submit-btn {
+  display: inline-block;
+  background-color: #1f2937;
+  color: #fff;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.performance-section .submit-btn:hover {
+  background-color: #d4af37;
+  border-color: #d4af37;
+}
+.performance-section .car-edit-cancel {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.2rem;
+  background-color: transparent;
+  color: #1f2937;
+  font-family: "Poppins", sans-serif;
+  border: 2px solid #1f2937;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background-color: red;
+}
+.performance-section .car-edit-cancel:hover {
+  color: #fff;
+  background-color: red;
+  border-color: #d4af37;
+  transform: translateX(-4px);
+}
+
 .categorie-index {
   padding: 2rem;
   font-family: "Poppins", sans-serif;

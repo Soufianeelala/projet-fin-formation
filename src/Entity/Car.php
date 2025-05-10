@@ -41,10 +41,8 @@ class Car
     private Collection $motorisationTypes;
 
     #[ORM\ManyToOne(inversedBy: 'cars')]
-#[ORM\JoinColumn(nullable: false)]
-private ?User $user = null;
-
-
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     private ?User $owner = null;
 
@@ -57,11 +55,16 @@ private ?User $user = null;
     #[ORM\Column(length: 255 , unique: true)]
     private ?string $matricule = null;
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    // Constructeur combiné
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->motorisationTypes = new ArrayCollection();
         $this->performanceCars = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -222,9 +225,17 @@ private ?User $user = null;
     public function setMatricule(string $matricule): static
     {
         $this->matricule = $matricule;
-
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
 
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
 }

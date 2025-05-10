@@ -77,39 +77,49 @@
   }
 
   button[type="submit"] {
-    background-color: v.$secondary-color;
-    color: v.$text-light;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-family: f.$font-sans;
+    display: block; 
+    margin: 2rem auto 0 auto; 
+    background-color: v.$primary-color;
+    color: #fff;
+    padding: 0.9rem 1.5rem;
     font-size: 1rem;
+    font-weight: 600;
+    font-family: f.$font-sans;
+    border: none;
+    border-radius: 0.5rem;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    align-self: flex-end;
-
+  
     &:hover {
       background-color: v.$secondary-color;
-      transform: translateY(-2px);
+      transform: scale(1.02);
     }
   }
+  
 }
 
 // Lien « Annuler » 
 .car-edit-cancel {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.2rem;
+  background-color: transparent;
   color: v.$primary-color;
   font-family: f.$font-sans;
+  border: 2px solid v.$primary-color;
+  border-radius: 0.5rem;
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.2s ease;
-  background: 3px red;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background-color: red;
+
 
   &:hover {
-    color: v.$secondary-color;
+    color: #fff;
+    background-color: red;
+    border-color: v.$secondary-color;
     transform: translateX(-4px);
-  }
-}
+}}
 
 // Bloc de sélection des motorisations
 .motorisation-options {
@@ -163,6 +173,17 @@
     }
   }
 }
+.edit-performance-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+.edit-performance-link:hover {
+  text-decoration: underline;
+}
+
 
 // Responsive
 @media (max-width: 600px) {

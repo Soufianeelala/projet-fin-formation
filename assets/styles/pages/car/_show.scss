@@ -1,5 +1,6 @@
 @use '../../base/variables' as v;
 @use '../../base/fonts'     as f;
+@use "sass:color";
 
 .car-show {
   padding: 2rem;
@@ -30,7 +31,6 @@
     }
   }
 
-  /* On cible la classe .car-show__slide dans la galerie */
   &__slide {
     border-radius: 8px;
     overflow: hidden;
@@ -99,16 +99,23 @@
     font-family: f.$font-sans;
 
     a.btn {
-      &.create-btn {
-        background: v.$secondary-color;
-        color: v.$text-light;
-        padding: 0.6rem 1.2rem;
-        border-radius: 6px;
+      &.retour-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.4rem;
+        border-radius: 5px;
+        font-weight: bold;
         text-decoration: none;
-        transition: background 0.3s ease, transform 0.2s ease;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        background-color: #6c757d;
+        color: v.$text-light;
 
         &:hover {
-          background-color: #dbd820;
+          background-color: color.scale(#6c757d, $lightness: -10%);
           transform: translateY(-2px);
         }
       }
@@ -130,6 +137,48 @@
         &:hover {
           background: v.$primary-color;
           transform: translateY(-2px);
+        }
+      }
+    }
+
+    /* === Modifier === */
+    a.btncarshow-edit {
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      background-color: #7ce735;
+      color: #212529;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: color.adjust(#7ce735, $lightness: -10%);
+      }
+    }
+
+    /* === Supprimer === */
+    form {
+      margin: 0;
+
+      button.btncarshow-delete {
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        background-color: red;
+        color: white;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: color.adjust(red, $lightness: -10%);
         }
       }
     }

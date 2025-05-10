@@ -69,5 +69,18 @@ class CarRepository extends ServiceEntityRepository
             ->select('DISTINCT c.marque')  // Sélectionner les marques distinctes
             ->getQuery()
             ->getResult();
-    }
+
+        }
+
+
+        // src/Repository/CarRepository.php
+public function findLastCars(int $limit = 4): array
+{
+    return $this->createQueryBuilder('c')
+        ->orderBy('c.createdAt', 'DESC')
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult();
+}
+
 }

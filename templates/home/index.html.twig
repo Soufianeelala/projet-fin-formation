@@ -3,9 +3,44 @@
 {% block title %}Accueil{% endblock %}
 
 {% block main %}
-    <h1>Bienvenue !</h1>
-    <h3>coucou</h3>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda animi illum, 
-    quae iusto molestias similique numquam quaerat praesentium facilis 
-    cumque consequatur? Expedita ex minima cumque soluta culpa similique? Maxime, incidunt!</p>
+
+    <section class="hero-banner"></section>
+
+    <section class="slogan-accueil">
+        <h2 class="slogan-accueil__title">"MYAUTO — Une route, une passion, une communauté !"</h2>
+        <p class="slogan-accueil__text">
+            Bienvenue sur <strong>MYAUTO</strong>, votre plateforme dédiée aux voitures de caractère.
+            Découvrez des véhicules uniques, partagez vos coups de cœur et rejoignez une communauté de passionnés d'automobile.
+        </p>
+    </section>
+
+    <section class="dernieres-voitures">
+        <h2 class="dernieres-voitures__title">Voitures Récentes</h2>
+
+        <div class="dernieres-voitures__grid">
+            {% for car in cars|slice(0, 4) %}
+                <div class="car-card">
+                    <div class="car-card__image">
+                        {% if car.images|length > 0 %}
+                            <img src="{{ asset(car.images|first.filePath) }}" alt="{{ car.marque }} {{ car.modele }}">
+                        {% else %}
+                            <div class="car-card__noimage">Pas d'image</div>
+                        {% endif %}
+                    </div>
+                    <div class="car-card__info">
+                        <h3 class="car-card__title">{{ car.marque }} {{ car.modele }}</h3>
+                        <p class="car-card__year">Année : {{ car.annee }}</p>
+                        <a href="{{ path('app_car_show', {id: car.id}) }}" class="btn btn--icon" title="Voir les détails">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="dernieres-voitures__more">
+            <a href="{{ path('app_car_index') }}" class="btn btn--see-all">Voir toutes les voitures</a>
+        </div>
+    </section>
+
 {% endblock %}

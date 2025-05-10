@@ -71,7 +71,10 @@
       <button type="submit" class="submit-btn">Suivant</button>
 
     {{ form_end(form) }}
-
+  
+{# <a href="{{ path('app_car_edit_details', { id: car.id }) }}" class="edit-performance-link">
+  ⚙️ Modifier les performances
+</a> #}
     <a href="{{ path('app_car_index') }}" class="car-edit-cancel">← Annuler</a>
   </div>
 </section>

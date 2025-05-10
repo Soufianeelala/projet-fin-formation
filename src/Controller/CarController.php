@@ -259,7 +259,8 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('app_car_edit_images', ['id' => $car->getId()]);
+            return $this->redirectToRoute('app_car_edit_details', ['id' => $car->getId()]);
+
         }
 
         return $this->render('car/edit.html.twig', [
@@ -398,7 +399,7 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
 
             $entityManager->flush();
             $this->addFlash('success', 'Performances mises à jour avec succès !');
-            return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
+            return $this->redirectToRoute('app_car_edit_images', ['id' => $car->getId()]);
         }
 
         return $this->render('car/edit_performance.html.twig', [

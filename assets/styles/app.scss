@@ -24,6 +24,9 @@
 @use 'pages/car/show' as carShow;
 @use 'pages/car/edit' as carEdit;
 @use 'pages/car/edit_images' as carEditImages;
+@use 'pages/car/edit_performance' as careditperformance;
+
+
 
 @use 'pages/categorie/index' as categoryIndex;
 @use 'pages/categorie/show' as categorieShow;

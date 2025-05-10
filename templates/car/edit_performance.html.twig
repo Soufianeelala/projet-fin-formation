@@ -3,12 +3,28 @@
 {% block title %}Modifier  les performances{% endblock %}
 
 {% block main %}
-    <h1>Modifier les détails de {{ car.marque }} {{ car.modele }}</h1>
+    <section class="performance-section">
+  <div class="performance-form-wrapper">
+    <h2 class="form-title">
+      Modifier les performances de {{ car.marque }} {{ car.modele }}
+    </h2>
 
+    {# {{ form_start(form) }}
+      {{ form_widget(form) }}
+      <button class="submit-btn">Suivante</button>
+    {{ form_end(form) }} #}
     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn btn-primary">Enregistrer</button>
-    {{ form_end(form) }}
+  {% for child in form %}
+    <div class="form-group">
+      {{ form_row(child) }}
+    </div>
+  {% endfor %}
+  <button class="submit-btn">Suivante</button>
+{{ form_end(form) }}
 
-    <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-secondary">Retour</a>
+
+    <a href="{{ path('app_car_show', {'id': car.id}) }}" class="car-edit-cancel">← Annuler</a>
+  </div>
+</section>
+
 {% endblock %}
