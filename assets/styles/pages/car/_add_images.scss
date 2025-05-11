@@ -1,8 +1,7 @@
 @use '../../base/variables' as v;
 @use '../../base/fonts' as f;
-@use "sass:color";
 
-.add-performance {
+.add-images {
   padding: 3rem 1.5rem;
   background-color: v.$secondary-color;
 
@@ -34,63 +33,30 @@
     }
   }
 
-  &__options {
-    margin-bottom: 2rem;
-
-    .add-performance__options-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-
-      .add-performance__option {
-        background: #f1f1f1;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        transition: background 0.3s;
-
-        label {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-weight: 500;
-          cursor: pointer;
-        }
-
-        &:hover {
-          background: #e4e4e4;
-        }
-      }
-    }
+  &__error {
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d8000c;
+    border-radius: 0.5rem;
   }
 
-  &__values {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
+  &__upload {
+    margin-bottom: 2rem;
 
-    .add-performance__input {
-      flex: 1 1 200px;
-      min-width: 150px;
-      padding: 0.7rem 1rem;
+    input[type="file"] {
+      width: 100%;
+      padding: 1rem;
       border: 1px solid #ccc;
-      border-radius: 0.4rem;
+      border-radius: 0.5rem;
       font-size: 1rem;
-      transition: border-color 0.3s, opacity 0.3s, transform 0.3s;
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .add-performance__input.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
   }
 
   &__submit-wrapper {
     display: flex;
     justify-content: flex-end;
-    margin-top: 2rem;
   }
 
   &__submit {
@@ -106,7 +72,6 @@
 
     &:hover {
       background-color: v.$secondary-color;
-      border-color: v.$secondary-color;
     }
   }
 }

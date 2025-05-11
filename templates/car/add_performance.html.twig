@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-<section class="performance-section">
-  <div class="performance-form-wrapper"> {# 👉 C’est ici que la classe SCSS est appliquée #}
-    <h2 class="form-title">
-      <i class="fas fa-tachometer-alt"></i> Ajouter des performances pour {{ car.marque }} {{ car.modele }}
+<section class="add-performance">
+  <div class="add-performance__form-wrapper">
+    <h2 class="add-performance__title">
+      <i class="fas fa-tachometer-alt"></i>
+      Ajouter des performances pour {{ car.marque }} {{ car.modele }}
     </h2>
 
     {{ form_start(form, {
@@ -12,13 +13,12 @@
       method: 'POST'
     }) }}
 
-    <div class="form-group performance-options">
-      <div class="options-list">
+    <div class="add-performance__options">
+      <div class="add-performance__options-list">
         {% for child in form.children %}
           {% if child.vars.name starts with 'performanceType_' %}
             {% set id = child.vars.name|replace({'performanceType_': ''}) %}
-            
-            <div class="form-group performance-option">
+            <div class="add-performance__option">
               <label>
                 {{ form_widget(child) }} {{ child.vars.label }}
               </label>
@@ -28,9 +28,12 @@
       </div>
     </div>
 
-    <div id="performance-values" class="performance-values"></div>
+    <div id="performance-values" class="add-performance__values"></div>
 
-    <button type="submit" class="submit-btn">Ajouter Performance</button>
+    <div class="add-performance__submit-wrapper">
+      <button type="submit" class="add-performance__submit">Ajouter Performance</button>
+    </div>
+
     {{ form_end(form) }}
   </div>
 </section>
@@ -53,15 +56,11 @@
           input.placeholder = `Valeur pour ${label}`;
           input.required = true;
           input.setAttribute('data-performance-id', performanceId);
-          input.classList.add('performance-input');
-
-          input.style.opacity = 0;
-          input.style.transition = 'opacity 0.4s ease';
+          input.classList.add('add-performance__input', 'visible');
           performanceValues.appendChild(input);
-          setTimeout(() => input.style.opacity = 1, 50);
         } else if (!this.checked && existingInput) {
-          existingInput.style.opacity = 0;
-          setTimeout(() => existingInput.remove(), 400);
+          existingInput.classList.remove('visible');
+          setTimeout(() => existingInput.remove(), 300);
         }
       });
     });

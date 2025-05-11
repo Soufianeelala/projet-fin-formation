@@ -1,16 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    <h1>Ajouter des images pour {{ car.marque }}</h1>
+<section class="add-images">
+  <div class="add-images__form-wrapper">
+    <h2 class="add-images__title">
+      <i class="fas fa-image"></i>
+      Ajouter des images pour {{ car.marque }} {{ car.modele }}
+    </h2>
+
     {% for message in app.flashes('error') %}
-    <div class="alert alert-danger">{{ message }}</div>
-{% endfor %}
+      <div class="add-images__error">{{ message }}</div>
+    {% endfor %}
 
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
-   {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-    {{ form_row(form.files) }}
-    <button type="submit">Ajouter des images</button>
-{{ form_end(form) }}
+    <div class="add-images__upload">
+      {{ form_row(form.files) }}
+    </div>
 
-    
+    <div class="add-images__submit-wrapper">
+      <button type="submit" class="add-images__submit">Ajouter des images</button>
+    </div>
+
+    {{ form_end(form) }}
+  </div>
+</section>
 {% endblock %}
