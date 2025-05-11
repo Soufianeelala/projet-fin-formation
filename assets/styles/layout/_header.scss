@@ -1,0 +1,24 @@
+
+@use "sass:color";
+@use '../base/variables' as v;
+@use '../base/fonts' as f;
+
+// ===== HEADER GENERAL =====
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background:  v.$primary-color;
+    color: v.$primary-color;
+    position: relative;
+    z-index: 1000;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: f.$font-sans;
+    color: v.$secondary-color;
+  
+  }

@@ -10,15 +10,15 @@
 
   h1 {
     font-size: 1.8rem;
-    margin-bottom: 1.5rem;
     background-color: v.$primary-color;
     text-align: center;
-    color: antiquewhite;
+    color: v.$secondary-color;
     width: 100%;
     max-width: 500px;
     margin: auto;
     padding: 1rem;
     border-radius: 8px;
+    margin-bottom: 2rem;
   }
 
   .btn-wrapper {
