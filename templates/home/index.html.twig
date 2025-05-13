@@ -16,36 +16,50 @@
   <a href="{{ path('app_car_new') }}" class="slogan-accueil__cta">🚗 Ajouter ta voiture & prendre la route avec nous !</a>
 </section>
 
-
-    <section class="dernieres-voitures">
+<section class="dernieres-voitures">
   <h2 class="dernieres-voitures__title">
     <i class="fas fa-car"></i>
-    Voitures Récentes Ajouter
+    Voitures récemment ajoutées
   </h2>
 
-  <div class="dernieres-voitures__grid">
-    {% for car in cars|slice(0, 4) %}
-      <div class="car-card">
-        <div class="car-card__image">
-          {% if car.images|length > 0 %}
-            <img src="{{ asset(car.images|first.filePath) }}" alt="{{ car.marque }} {{ car.modele }}">
-          {% else %}
-            <div class="car-card__noimage">Pas d'image</div>
-          {% endif %}
-        </div>
-        <div class="car-card__info">
-          <h3 class="car-card__title">{{ car.marque }} {{ car.modele }}</h3>
-          <p class="car-card__year">Année : {{ car.annee }}</p>
-          <a href="{{ path('app_car_show', {id: car.id}) }}" class="btn btn--icon" title="Voir les détails">
-            <i class="fas fa-eye"></i>
-          </a>
-        </div>
+<div class="dernieres-voitures__grid">
+  {% for car in cars|slice(0, 4) %}
+    <div class="car-card">
+      <div class="car-card__image">
+        {% if car.images|length > 0 %}
+          <img src="{{ asset(car.images|first.filePath) }}" alt="{{ car.marque }} {{ car.modele }}">
+        {% else %}
+          <div class="car-card__noimage">Pas d'image</div>
+        {% endif %}
       </div>
-    {% endfor %}
-  </div>
+
+      <div class="car-card__info">
+        <h3 class="car-card__title">{{ car.marque }} {{ car.modele }}</h3>
+        <p class="car-card__year">Année : {{ car.annee }}</p>
+
+        <!-- Ajouts corrigés -->
+        <p class="car-card__category">Catégorie : {{ car.categorie ? car.categorie.nom : '—' }}</p>
+        <p class="car-card__engine">
+          Motorisations :
+          {{ car.motorisationTypes|map(t => t.nom)|join(', ') ?: '—' }}
+        </p>
+        <p class="car-card__owner">Propriétaire : {{ car.user.email }}</p>
+        <p class="car-card__date">Ajoutée le : {{ car.createdAt|date('d/m/Y') }}</p>
+
+        <a href="{{ path('app_car_show', {id: car.id}) }}" class="btn btn--details" title="Voir les détails">
+          <i class="fas fa-eye"></i> Détails
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
 
   <div class="dernieres-voitures__more">
-    <a href="{{ path('app_car_index') }}" class="btn btn--see-all">Voir la liste des voitures</a>
+    <a href="{{ path('app_car_index') }}" class="btn btn--see-all">
+      Voir toutes les voitures
+    </a>
   </div>
 </section>
 

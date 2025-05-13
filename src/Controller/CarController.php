@@ -252,8 +252,13 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
 
 
     #[Route('/{id}/edit', name: 'app_car_edit', methods: ['GET', 'POST'])]
-    public function edit(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Car $car, Request $request, EntityManagerInterface $entityManager , Security $security): Response
     {
+        $user = $security->getUser();
+
+    if ($user !== $car->getUser() && !$security->isGranted('ROLE_ADMIN')) {
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier cette voiture.");
+    }
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
 
@@ -270,8 +275,14 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
     }
 
     #[Route('/{id}/edit-images', name: 'app_car_edit_images', methods: ['GET', 'POST'])]
-    public function editImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
+    public function editImages(Request $request, Car $car, EntityManagerInterface $entityManager, Security $security): Response
     {
+        $user = $security->getUser();
+
+        if ($user !== $car->getUser() && !$security->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier les images de cette voiture.");
+        }
+    
         $form = $this->createForm(CarImagesType::class);
         $form->handleRequest($request);
     
@@ -352,8 +363,15 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
     }
    
     #[Route('/{id}/edit-details', name: 'app_car_edit_details', methods: ['GET', 'POST'])]
-    public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+    public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        $user = $security->getUser();
+
+    if ($user !== $car->getUser() && !$security->isGranted('ROLE_ADMIN')) {
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier les performances de cette voiture.");
+    }
+
+
         $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
         $existingPerformances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
 
@@ -368,7 +386,7 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
         // Créer et gérer le formulaire
         $form = $this->createForm(PerformanceCarType::class, null, [
             'performance_types' => $performanceTypes,
-            'data_class' => null, // Pour éviter l'erreur liée à l'attente d'une entité
+            'data_class' => null, 
             'data' => $data
         ]);
         $form->handleRequest($request);

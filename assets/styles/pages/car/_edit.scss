@@ -26,8 +26,8 @@
 // Titre flottant
 .car-edit-title {
   position: absolute;
-  top: -1.2rem;
-  left: 2rem;
+  top: -1rem;
+  margin-bottom: 2rem;
   background: v.$primary-color;
   color: v.$text-light;
   padding: 0.5rem 1rem;
@@ -47,9 +47,10 @@
     margin-bottom: 1.25rem;
 
     label {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+      // font-weight: 600;
+      margin-bottom: 1rem;
       color: v.$text-dark;
+      margin-top: 1rem;
     }
 
     input,
