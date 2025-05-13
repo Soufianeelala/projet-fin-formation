@@ -29,7 +29,12 @@
       <dl class="car-show__list">
         <div><dt><h4>Matricule</h4></dt><dd>{{ car.matricule }}</dd></div>
         <div><dt><h4>Année</3></dt><dd>{{ car.annee }}</dd></div>
-        <div><dt><h4>Catégorie</h4></dt><dd>{{ car.categorie ? car.categorie.nom : '—' }}</dd></div>
+          <p class="car-card__category">
+          Catégories : {{ car.categories|length > 0 
+          ? car.categories|map(c => c.nom)|join(', ') 
+          : '—' 
+          }}
+</p>
         <div><dt><h4>Motorisations</h4></dt>
           <dd>{{ car.motorisationTypes|map(t => t.nom)|join(', ') ?: '—' }}</dd>
         </div>

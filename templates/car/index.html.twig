@@ -53,7 +53,10 @@
             <div class="car-card__body">
                 <h3 class="car-card__title">{{ car.marque }} {{ car.modele }}</h3>
                 <p class="car-card__year">Année : {{ car.annee }}</p>
-                <p class="car-card__year">Catégorie : {{ car.categorie ? car.categorie.nom : '—' }}</p>
+                <p class="car-card__category">
+                   Catégories :
+                    {{ car.categories|length > 0 
+                    ? car.categories|map(c => c.nom)|join(', ') : '—'}}</p>
                 <p class="car-card__year">
                     Motorisations :
                     {{ car.motorisationTypes|map(m => m.nom)|join(', ') ?: '—' }}

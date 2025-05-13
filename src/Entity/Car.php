@@ -24,10 +24,7 @@ class Car
     #[ORM\Column]
     private ?int $annee = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cars')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Categorie $categorie = null;
-
+    
     /**
      * @var Collection<int, Image>
      */
@@ -58,6 +55,32 @@ class Car
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
+
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'cars')]
+    private Collection $categories;
+    
+    
+    
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+    
+    public function addCategory(Categorie $categorie): static
+    {
+        if (!$this->categories->contains($categorie)) {
+            $this->categories->add($categorie);
+        }
+        return $this;
+    }
+    
+    public function removeCategory(Categorie $categorie): static
+    {
+        $this->categories->removeElement($categorie);
+        return $this;
+    }
+
+
     // Constructeur combiné
     public function __construct()
     {
@@ -65,7 +88,11 @@ class Car
         $this->motorisationTypes = new ArrayCollection();
         $this->performanceCars = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->categories = new ArrayCollection();
+
     }
+
+
 
     public function getId(): ?int
     {
@@ -105,16 +132,7 @@ class Car
         return $this;
     }
 
-    public function getCategorie(): ?Categorie
-    {
-        return $this->categorie;
-    }
-
-    public function setCategorie(?Categorie $categorie): static
-    {
-        $this->categorie = $categorie;
-        return $this;
-    }
+   
 
     /**
      * @return Collection<int, Image>
