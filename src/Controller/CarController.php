@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Car;
 use App\Entity\Image;
 use App\Form\CarType;
+use App\Entity\Commentaire;
 use App\Form\CarImagesType;
+use App\Form\CommentaireType;
 use App\Entity\PerformanceCar;
 use App\Entity\PerformanceType;
 use App\Entity\MotorisationType;
@@ -239,16 +241,63 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
      ]);
  }
 
+//  **************************partie show et commentaire *******************************************
+
+ #[Route('/{id}', name: 'app_car_show', methods: ['GET', 'POST'])]
+public function show(Request $request, Car $car, EntityManagerInterface $entityManager): Response
+{
+    $user = $this->getUser();
+
+    // ---- Ajout d’un commentaire ----
+    $commentaire = new Commentaire();
+    $commentaire->setCar($car);
+    if ($user) {
+        $commentaire->setUser($user);
+    }
+
+    $commentaireForm = $this->createForm(CommentaireType::class, $commentaire);
+    $commentaireForm->handleRequest($request);
+
+    if ($commentaireForm->isSubmitted() && $commentaireForm->isValid()) {
+        $commentaire->setCreatedAt(new \DateTimeImmutable());
+        $entityManager->persist($commentaire);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
+    }
+
+    // ---- Edition d’un commentaire ----
+    $editCommentId = $request->query->get('edit'); // récupère ?edit=ID dans l'URL
+    $editForm = null;
+    $commentToEdit = null;
+
+    if ($editCommentId) {
+        $commentToEdit = $entityManager->getRepository(Commentaire::class)->find($editCommentId);
+
+        // Vérifie si le commentaire existe et si l'utilisateur peut le modifier
+        if ($commentToEdit && ($commentToEdit->getUser() === $user || $this->isGranted('ROLE_ADMIN'))) {
+            $editForm = $this->createForm(CommentaireType::class, $commentToEdit);
+            $editForm->handleRequest($request);
+
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                $entityManager->flush();
+                return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
+            }
+        }
+    }
+
+    return $this->render('car/show.html.twig', [
+        'car' => $car,
+        'commentaireForm' => $commentaireForm->createView(),
+        'editForm' => $editForm ? $editForm->createView() : null,
+        'editComment' => $commentToEdit,
+    ]);
+}
+
  
 
- // Afficher une voiture
- #[Route('/{id}', name: 'app_car_show', methods: ['GET'])]
- public function show(Car $car): Response
- {
-     return $this->render('car/show.html.twig', [
-         'car' => $car,
-     ]);
- }
+
+
 
 
     #[Route('/{id}/edit', name: 'app_car_edit', methods: ['GET', 'POST'])]

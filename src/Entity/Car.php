@@ -58,6 +58,12 @@ class Car
 
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'cars')]
     private Collection $categories;
+
+    /**
+     * @var Collection<int, Commentaire>
+     */
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'car')]
+    private Collection $commentaires;
     
     
     
@@ -89,6 +95,7 @@ class Car
         $this->performanceCars = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->categories = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
 
     }
 
@@ -254,6 +261,36 @@ class Car
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setCar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getCar() === $this) {
+                $commentaire->setCar(null);
+            }
+        }
+
         return $this;
     }
 }

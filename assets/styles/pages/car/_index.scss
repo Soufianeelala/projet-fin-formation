@@ -13,8 +13,6 @@
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  margin: auto;
   margin-top: 2rem;
 }
 
@@ -46,9 +44,13 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 1.1);
+
 
     &:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 4.15); 
+
     }
 
     &__img,

@@ -38,7 +38,9 @@
         <p class="car-card__year">Année : {{ car.annee }}</p>
 
         <!-- Ajouts corrigés -->
-        <p class="car-card__category">Catégorie : {{ car.categorie ? car.categorie.nom : '—' }}</p>
+        Catégories :
+                    {{ car.categories|length > 0 
+                    ? car.categories|map(c => c.nom)|join(', ') : '—'}}</p>
         <p class="car-card__engine">
           Motorisations :
           {{ car.motorisationTypes|map(t => t.nom)|join(', ') ?: '—' }}

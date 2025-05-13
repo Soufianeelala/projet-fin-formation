@@ -4,9 +4,10 @@
 
 // ===== SLIDER =====
 .slider-container {
+  background-image: url('/uploads/images/slide3.jpg');
 
   background-size: cover;
-  background-position: center;
+  background-position: top;
   background-repeat: no-repeat;
     position: relative;
     width: 100%;
