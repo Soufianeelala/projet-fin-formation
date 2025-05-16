@@ -51,56 +51,46 @@
         </div>
         <div><dt><h4>Propriétaire</h4></dt><dd>{{ car.user.email }}</dd></div>
       </dl>
+{# Affichage des commentaires #}
+{% for commentaire in car.commentaires %}
+  <div id="comment-{{ commentaire.id }}" class="comment mt-3 p-3 border rounded bg-light">
+    <p>
+      <strong>{{ commentaire.user.email }}</strong>
+      le {{ commentaire.createdAt|date('d/m/Y H:i') }}
+      {% if commentaire.updatedAt %}
+        <small>(modifié le {{ commentaire.updatedAt|date('d/m/Y H:i') }})</small>
+      {% endif %}
+    </p>
 
-{#************ Partie commentaire #}
-{# Affichage des commentaires déjà existants #}
-<div class="comment-section">
-    <h3>Commentaires :</h3>
-    {% for commentaire in car.commentaires %}
-        <div class="comment">
-            <p><strong>{{ commentaire.user.email }}</strong> le {{ commentaire.createdAt|date('d/m/Y H:i') }}</p>
-
-            {# Si on modifie ce commentaire #}
-            {% if editComment and editComment.id == commentaire.id %}
-                {{ form_start(editForm, {'action': path('app_car_show', {'id': car.id}) ~ '?edit=' ~ commentaire.id}) }}
-                    {{ form_widget(editForm.commentaire, {'attr': {'placeholder': 'Modifier ton commentaire'}}) }}
-                    <button type="submit" class="btn btn-success btn-sm">Mettre à jour</button>
-                    <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-secondary btn-sm">Annuler</a>
-                {{ form_end(editForm) }}
-            {% else %}
-                <p>{{ commentaire.commentaire }}</p>
-
-               {% if app.user and (app.user == commentaire.user or is_granted('ROLE_ADMIN')) %}
-                <a href="{{ path('app_car_show', {'id': car.id}) ~ '?edit=' ~ commentaire.id }}" class="btn btn-sm btn-warning" title="Modifier ce commentaire">
-                    <i class="fas fa-edit"></i> Modifier
-                </a>
-                <form method="post" action="{{ path('app_commentaire_delete', {'id': commentaire.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ce commentaire ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
-                    <button class="dangercomment" title="Supprimer ce commentaire">
-                        <i class="fas fa-trash-alt"></i> Supprimer
-                    </button>
-                </form>
-              {% endif %}
-
-            {% endif %}
-        </div>
+    {% if editComment and editComment.id == commentaire.id %}
+      {# Formulaire d'édition à la place exacte du commentaire #}
+      {{ form_start(editForm, {
+        'action': path('app_commentaire_edit', {'id': commentaire.id}),
+        'attr': {'class': 'edit-comment-form'}
+      }) }}
+        {{ form_widget(editForm.commentaire) }}
+        <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+        <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-cancel btn-sm">Annuler</a>
+      {{ form_end(editForm) }}
     {% else %}
-        <p>Aucun commentaire pour le moment.</p>
-    {% endfor %}
+      <p>{{ commentaire.commentaire }}</p>
 
-    {# Formulaire d'ajout de commentaire si l'utilisateur est connecté #}
-    {% if app.user %}
-        <h3>Laissez un commentaire :</h3>
-        {{ form_start(commentaireForm, {'action': path('app_car_show', {'id': car.id})}) }}
-            <div class="comment-box">
-                {{ form_widget(commentaireForm.commentaire, {'attr': {'placeholder': 'Écrire ton commentaire...'}}) }}
-                <button type="submit" class="btn btn-primary">Envoyer</button>
-            </div>
-        {{ form_end(commentaireForm) }}
-    {% else %}
-        <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour laisser un commentaire.</p>
+      {% if app.user and (app.user == commentaire.user or is_granted('ROLE_ADMIN')) %}
+        <a href="{{ path('app_car_show', {'id': car.id, 'edit': commentaire.id}) }}" class="btn btn-sm btn-warning">
+          <i class="fas fa-edit"></i> Modifier
+        </a>
+        <form method="post" action="{{ path('app_commentaire_delete', {'id': commentaire.id}) }}"
+              onsubmit="return confirm('Supprimer ce commentaire ?');" style="display:inline;">
+          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+          <button class="btn btn-sm btn-delete">
+            <i class="fas fa-trash-alt"></i> Supprimer
+          </button>
+        </form>
+      {% endif %}
     {% endif %}
-</div>
+  </div>
+{% endfor %}
+
 
 {# ****************************** #}
 
