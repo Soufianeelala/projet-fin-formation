@@ -147,50 +147,35 @@ final class CarController extends AbstractController
 #[Route('/{id}/add-performance', name: 'app_car_add_performance')]
 public function addPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
 {
-    // Récupérer les types de performance
     $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
 
-    // Créer le formulaire
-    $form = $this->createForm(PerformanceCarType::class, null, [
+    $form = $this->createForm(PerformanceCarType::class, new PerformanceCar(), [
         'performance_types' => $performanceTypes,
     ]);
 
     $form->handleRequest($request);
 
-    // Vérification si le formulaire est soumis et valide
     if ($form->isSubmitted() && $form->isValid()) {
-        $data = $form->getData();  // Récupérer les données envoyées par le formulaire
-        
         foreach ($performanceTypes as $performanceType) {
-            $performanceId = $performanceType->getId();
-            
-            // Vérifier si la performance a été sélectionnée
-            if ($form->get('performanceType_' . $performanceId)->getData()) {
-                // Si la performance est sélectionnée, on récupère la valeur associée
-                $value = $form->get('valeur_' . $performanceId)->getData();
-                
+            $id = $performanceType->getId();
+
+            if ($form->get('performanceType_' . $id)->getData()) {
+                $value = $form->get('valeur_' . $id)->getData();
+
                 if ($value) {
                     $performanceCar = new PerformanceCar();
                     $performanceCar->setCar($car);
                     $performanceCar->setPerformanceType($performanceType);
-                    $performanceCar->setValeur((string) $value);  // Conversion explicite en chaîne
-                    
+                    $performanceCar->setValeur((string) $value);
+
                     $entityManager->persist($performanceCar);
                 }
             }
         }
 
-        // Sauvegarder les performances dans la base de données
         $entityManager->flush();
-        
         $this->addFlash('success', 'Performances ajoutées avec succès !');
         return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
-    }
-
-    // Si le formulaire n'est pas soumis ou valide, on affiche les erreurs
-    if (!$form->isSubmitted()) {
-        dump('Formulaire non soumis');
-        dump($request->request->all()); // Affiche tout ce qui est dans la requête POST
     }
 
     return $this->render('car/add_performance.html.twig', [
@@ -386,93 +371,78 @@ public function show(Request $request, Car $car, EntityManagerInterface $entityM
         return $this->redirectToRoute('app_car_edit_images', ['id' => $image->getCar()->getId()]);
     }
 
-    #[Route('/{id}', name: 'app_car_delete', methods: ['POST'])]
-    public function delete(Request $request, Car $car, EntityManagerInterface $entityManager, Security $security): Response
-    {
-        $user = $security->getUser();
-    
-        if ($user !== $car->getUser() && !$security->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer cette voiture.");
-        }
-    
-        if ($this->isCsrfTokenValid('delete' . $car->getId(), $request->request->get('_token'))) {
-            foreach ($car->getImages() as $image) {
-                $imagePath = $this->getParameter('kernel.project_dir') . '/public/' . $image->getFilePath();
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-                $entityManager->remove($image);
-            }
-    
-            $entityManager->remove($car);
-            $entityManager->flush();
-        }
-    
-        return $this->redirectToRoute('app_car_index');
-    }
-   
-    #[Route('/{id}/edit-details', name: 'app_car_edit_details', methods: ['GET', 'POST'])]
-    public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager, Security $security): Response
-    {
-        $user = $security->getUser();
+   #[Route('/{id}/delete', name: 'app_car_delete', methods: ['POST'])]
+public function delete(Request $request, Car $car, EntityManagerInterface $entityManager, Security $security): Response
+{
+    $user = $security->getUser();
 
     if ($user !== $car->getUser() && !$security->isGranted('ROLE_ADMIN')) {
-        throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier les performances de cette voiture.");
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer cette voiture.");
     }
 
+    if (!$this->isCsrfTokenValid('delete' . $car->getId(), $request->request->get('_token'))) {
+        throw new \Exception('Token CSRF invalide');
+    }
 
-        $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
-        $existingPerformances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
-
-        // Créer les données initiales
-        $data = [];
-        foreach ($performanceTypes as $performanceType) {
-            $existingPerformance = array_filter($existingPerformances, fn($pc) => $pc->getPerformanceType()->getId() === $performanceType->getId());
-            $data['performanceType_' . $performanceType->getId()] = !empty($existingPerformance);
-            $data['valeur_' . $performanceType->getId()] = $existingPerformance ? reset($existingPerformance)->getValeur() : null;
+    foreach ($car->getImages() as $image) {
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/' . $image->getFilePath();
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
         }
+        $entityManager->remove($image);
+    }
 
-        // Créer et gérer le formulaire
-        $form = $this->createForm(PerformanceCarType::class, null, [
-            'performance_types' => $performanceTypes,
-            'data_class' => null, 
-            'data' => $data
-        ]);
-        $form->handleRequest($request);
+    $entityManager->remove($car);
+    $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($performanceTypes as $performanceType) {
-                $performanceId = $performanceType->getId();
-                $isChecked = $form->get('performanceType_' . $performanceId)->getData();
-                $value = $form->get('valeur_' . $performanceId)->getData();
+    return $this->redirectToRoute('app_car_index');
+}
 
-                $existingPerformance = array_filter($existingPerformances, fn($pc) => $pc->getPerformanceType()->getId() === $performanceId);
+  #[Route('/{id}/edit-details', name: 'app_car_edit_details')]
+public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
+    $existingPerformances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
 
-                if ($isChecked) {
-                    if (empty($existingPerformance)) {
-                        $performanceCar = new PerformanceCar();
-                        $performanceCar->setCar($car);
-                        $performanceCar->setPerformanceType($performanceType);
-                        $performanceCar->setValeur((string) $value);
-                        $entityManager->persist($performanceCar);
-                    } else {
-                        $performanceCar = reset($existingPerformance);
-                        $performanceCar->setValeur((string) $value);
-                    }
-                } else if (!empty($existingPerformance)) {
-                    $entityManager->remove(reset($existingPerformance));
+    $form = $this->createForm(PerformanceCarType::class, null, [
+        'performance_types' => $performanceTypes,
+        'existing_data' => $existingPerformances, // Passer les données existantes
+    ]);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Supprimer les anciennes performances
+        foreach ($existingPerformances as $performance) {
+            $entityManager->remove($performance);
+        }
+        
+        // Ajouter les nouvelles performances
+        foreach ($performanceTypes as $performanceType) {
+            $id = $performanceType->getId();
+            
+            if ($form->get("performanceType_$id")->getData()) {
+                $value = $form->get("valeur_$id")->getData();
+                
+                if ($value) {
+                    $performanceCar = new PerformanceCar();
+                    $performanceCar->setCar($car)
+                                 ->setPerformanceType($performanceType)
+                                 ->setValeur((string)$value);
+                    $entityManager->persist($performanceCar);
                 }
             }
-
-            $entityManager->flush();
-            $this->addFlash('success', 'Performances mises à jour avec succès !');
-            return $this->redirectToRoute('app_car_edit_images', ['id' => $car->getId()]);
         }
+        
+        $entityManager->flush();
+        $this->addFlash('success', 'Performances mises à jour avec succès !');
+            return $this->redirectToRoute('app_car_edit_images', ['id' => $car->getId()]);    }
 
-        return $this->render('car/edit_performance.html.twig', [
-            'car' => $car,
-            'form' => $form->createView(),
-            'performance_types' => $performanceTypes,
-        ]);
-    }
+    return $this->render('car/edit_performance.html.twig', [
+        'car' => $car,
+        'form' => $form->createView(),
+         'performance_types' => $performanceTypes,
+        'existing_data' => $existingPerformances,
+    ]);
+}
 } 

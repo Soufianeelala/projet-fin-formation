@@ -1,13 +1,13 @@
 {# templates/car/edit.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier {{ car.marque }} {{ car.modele }}{% endblock %}
+{% block title %}Modifier  {{ car.marque }} {{ car.modele }}{% endblock %}
 
 {% block main %}
 <section class="car-edit-section">
   <div class="car-edit-form-container">
     <h2 class="car-edit-title">
-      Modifier {{ car.marque }} {{ car.modele }}
+      Modifier La<br><span>🚗 {{ car.marque }} {{ car.modele }}</span></h2>
     </h2>
 
     {{ form_start(form, { attr: { class: 'car-edit-form' } }) }}
@@ -36,11 +36,33 @@
         {{ form_errors(form.annee) }}
       </div>
 
-      <div class="form-group">
-        {{ form_label(form.categories) }}
-        {{ form_widget(form.categories) }}
-        {{ form_errors(form.categories) }}
-      </div>
+     <div class="car-edit-form-group">
+  <label class="car-edit-group-label">{{ form_label(form.categories) }}</label>
+
+  <div class="car-edit-category-checkboxes">
+    {% for category in form.categories %}
+      {% set label = category.vars.label|lower %}
+      <label class="car-edit-category-option">
+        {{ form_widget(category) }}
+        {% if 'suv' in label %}
+          <i class="fas fa-car-side"></i>
+        {% elseif 'sport' in label %}
+          <i class="fas fa-flag-checkered"></i>
+        {% elseif 'berline' in label %}
+          <i class="fas fa-taxi"></i>
+        {% elseif 'pickup' in label %}
+          <i class="fas fa-truck-pickup"></i>
+        {% else %}
+          <i class="fas fa-car"></i>
+        {% endif %}
+        {{ category.vars.label }}
+      </label>
+    {% endfor %}
+  </div>
+
+  {{ form_errors(form.categories) }}
+</div>
+
 
       <div class="form-group motorisation-options">
   <span class="group-label">{{ form_label(form.motorisationTypes) }}</span>
@@ -75,7 +97,7 @@
 {# <a href="{{ path('app_car_edit_details', { id: car.id }) }}" class="edit-performance-link">
   ⚙️ Modifier les performances
 </a> #}
-    <a href="{{ path('app_car_index') }}" class="car-edit-cancel">← Annuler</a>
+    <a href="{{ path('app_car_index') }}" class="car-edit-cancel">X Annuler</a>
   </div>
 </section>
 {% endblock %}

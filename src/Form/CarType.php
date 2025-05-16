@@ -30,8 +30,8 @@ class CarType extends AbstractType
                 'choice_label' => 'nom',
                 'multiple' => true,
                 'expanded' => true, // true = checkbox, false = liste déroulante
-                'label' => 'Catégories',
-            ])
+                'label' => 'Catégories de voiture',
+                'attr' => ['class' => 'custom-dropdown'],            ])
 
             // ✅ Relation ManyToMany avec MotorisationType
             ->add('motorisationTypes', EntityType::class, [

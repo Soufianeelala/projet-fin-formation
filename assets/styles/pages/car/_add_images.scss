@@ -1,5 +1,7 @@
 @use '../../base/variables' as v;
 @use '../../base/fonts' as f;
+@use 'sass:color';
+
 
 .add-images {
   padding: 3rem 1.5rem;
@@ -7,29 +9,40 @@
 
   &__form-wrapper {
     max-width: 700px;
-    margin: 0 auto;
-    background: #ffffff;
+    margin: 4rem auto;
+    background: #fff;
     padding: 2.5rem;
     border-radius: 1rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 
   &__title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: v.$secondary-color;
-    background-color: v.$primary-color;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-radius: 0.6rem;
+    background: radial-gradient(circle, rgba(212, 175, 55, 1) 30%, rgba(229, 231, 235, 1) 96%);
+    color: v.$primary-color;
+    font-size: 2rem;
+    border-radius: 15%;
+    width: fit-content;
+    padding: 0.8rem 1.5rem;
+    margin: auto;
+    margin-top: -2.2rem;
+    text-align: center;
 
-    i {
-      color: #007bff;
+    span {
+      display: block;
+      color: #fff;
+      font-weight: bold;
+      font-size: 2.2rem;
+      margin-top: 0.5rem;
+      border-radius: 44%;
+      background: radial-gradient(circle, rgba(31, 41, 55, 1) 98%, rgba(212, 175, 55, 0.9) 86%);
+      padding: 0.2rem 0.8rem;
+    }
+
+    small {
+      display: block;
+      margin-top: 0.5rem;
+      color: #333;
+      font-size: 0.9rem;
     }
   }
 
@@ -37,13 +50,31 @@
     background-color: #ffdddd;
     color: #d8000c;
     padding: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
     border: 1px solid #d8000c;
     border-radius: 0.5rem;
   }
 
   &__upload {
-    margin-bottom: 2rem;
+    margin-top: 2rem;
+
+    label {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+
+      .info-icon {
+        margin-left: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        color: v.$primary-color;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
 
     input[type="file"] {
       width: 100%;
@@ -56,22 +87,23 @@
 
   &__submit-wrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    margin-top: 2rem;
   }
 
-  &__submit {
-    background-color: v.$primary-color;
+  .submit-btn {
+    background-color: #000;
     color: #fff;
-    padding: 0.9rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 0.7rem 2rem;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
+    font-weight: bold;
     cursor: pointer;
     transition: background 0.3s;
 
     &:hover {
-      background-color: v.$secondary-color;
+        background-color: color.adjust(#000, $lightness: 15%);
+
     }
   }
 }

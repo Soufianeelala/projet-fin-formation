@@ -1,30 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier  les performances{% endblock %}
+{% block title %}Modifier les performances{% endblock %}
 
 {% block main %}
     <section class="performance-section">
-  <div class="performance-form-wrapper">
-    <h2 class="form-title">
-      Modifier les performances de {{ car.marque }} {{ car.modele }}
-    </h2>
+        <div class="performance-form-wrapper">
+            <h2 class="form-title">
+                Modifier les performances de <span>🚗 {{ car.marque }} {{ car.modele }}⚙️</span>
+            </h2>
 
-    {# {{ form_start(form) }}
-      {{ form_widget(form) }}
-      <button class="submit-btn">Suivante</button>
-    {{ form_end(form) }} #}
-    {{ form_start(form) }}
-  {% for child in form %}
-    <div class="form-group">
-      {{ form_row(child) }}
-    </div>
-  {% endfor %}
-  <button class="submit-btn">Suivante</button>
-{{ form_end(form) }}
+            {{ form_start(form) }}
+                <div class="performance-grid">
+                    {% for performance_type in performance_types %}
+                        {% set id = performance_type.id %}
+                        <div class="performance-item">
+                            <div class="form-group">
+                                {{ form_label(form['performanceType_' ~ id]) }}
+                                {{ form_widget(form['performanceType_' ~ id], {
+                                    'attr': {
+                                        'class': 'performance-checkbox',
+                                        'data-id': id
+                                    }
+                                }) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_widget(form['valeur_' ~ id], {
+                                    'attr': {
+                                        'class': 'performance-value',
+                                        'data-id': id
+                                    }
+                                }) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="submit-container-outside">
+                    <button type="submit" class="submit-btn">Enregistrer</button>
+                </div>
+            {{ form_end(form) }}
 
+            <a href="{{ path('app_car_show', {'id': car.id}) }}" class="car-edit-cancel">X Annuler</a>
+        </div>
+    </section>
 
-    <a href="{{ path('app_car_show', {'id': car.id}) }}" class="car-edit-cancel">← Annuler</a>
-  </div>
-</section>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Active/désactive les champs valeur selon l'état de la checkbox
+            document.querySelectorAll('.performance-checkbox').forEach(checkbox => {
+                const id = checkbox.dataset.id;
+                const valueField = document.querySelector(`.performance-value[data-id="${id}"]`);
+                
+                // État initial
+                valueField.disabled = !checkbox.checked;
+                
+                // Gestion du changement
+                checkbox.addEventListener('change', function() {
+                    valueField.disabled = !this.checked;
+                    if (!this.checked) {
+                        valueField.value = '';
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

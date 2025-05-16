@@ -1,40 +1,46 @@
 // public/js/slider-menu.js
 document.addEventListener("DOMContentLoaded", () => {
     // ===== MENU BURGER =====
-    const burger  = document.getElementById("burger");
-    const menu    = document.getElementById("menu");
-    const overlay = document.getElementById("overlay");
-    const body    = document.body;
-  
-    function toggleMenu() {
-      menu.classList.toggle("active");
-      burger.classList.toggle("active");
-      overlay.classList.toggle("active");
-      body.classList.toggle("no-scroll");
-    }
-  
-    function closeMenu() {
-      menu.classList.remove("active");
-      burger.classList.remove("active");
-      overlay.classList.remove("active");
-      body.classList.remove("no-scroll");
-    }
-  
-    if (burger && menu && overlay) {
-      burger.addEventListener("click", e => {
-        e.stopPropagation();
-        toggleMenu();
-      });
-      overlay.addEventListener("click", closeMenu);
-      document.addEventListener("click", e => {
-        if (!menu.contains(e.target) && !burger.contains(e.target)) {
-          closeMenu();
-        }
-      });
-      document.addEventListener("keydown", e => {
-        if (e.key === "Escape") closeMenu();
-      });
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+  const burger  = document.getElementById("burger");
+  const menu    = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+  const body    = document.body;
+
+  function toggleMenu() {
+    menu.classList.toggle("active");
+    burger.classList.toggle("active");
+    overlay.classList.toggle("active");
+    body.classList.toggle("no-scroll");
+  }
+
+  function closeMenu() {
+    menu.classList.remove("active");
+    burger.classList.remove("active");
+    overlay.classList.remove("active");
+    body.classList.remove("no-scroll");
+  }
+
+  if (burger && menu && overlay) {
+    burger.addEventListener("click", e => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("click", e => {
+      if (!menu.contains(e.target) && !burger.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeMenu();
+    });
+  }
+});
+
   
     // ===== SLIDER =====
     let currentIndex = 0;

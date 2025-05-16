@@ -4,11 +4,11 @@
 @use '../utils/mixins' as m;
 
 .filter {
-    margin: 20px auto;
+    margin:  auto;
     padding: 20px;
-    background: linear-gradient(135deg, #2c3e50, #fdcb6e);
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #1F2937;
+    background: radial-gradient(circle, rgba(31, 41, 55, 1) 0%, rgba(212, 175, 55, 1) 42%);
+    // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     gap: 20px;

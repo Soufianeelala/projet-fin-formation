@@ -24,37 +24,44 @@
 </head>
 
 <body>
-    <!-- HEADER + BURGER + OVERLAY -->
-    <header>
-        <div class="logo">MyAuto</div>
+   <!-- HEADER + BURGER + OVERLAY -->
+<header>
+  <div class="logo">MyAuto</div>
 
-        <div id="burger" class="burger">
-            <span></span><span></span><span></span>
-        </div>
+  <div id="burger" class="burger">
+    <span></span><span></span><span></span>
+  </div>
 
-        <nav id="menu" class="menu">
-            <ul>
-                <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                <li><a href="{{ path('app_car_index') }}">Liste des voitures</a></li>
-                <li><a href="{{ path('app_car_new') }}">Ajouter une voiture</a></li>
-                <li><a href="{{ path('app_motorisation_type_index') }}">Types de motorisation</a></li>
-                {# <li><a href="{{ path('app_motorisation_type_new') }}">Ajouter un type de motorisation</a></li> #}
-                <li><a href="{{ path('app_performance_type_index') }}">Types de performance</a></li>
-                {# <li><a href="{{ path('app_performance_type_new') }}">Ajouter un type de performance</a></li> #}
-                {# <li><a href="{{ path('app_categorie_new') }}">Ajouter une Catégorie</a></li> #}
-                <li><a href="{{ path('app_categorie_index') }}">Types de catégorie</a></li>
+  <nav id="menu" class="menu">
+    <ul>
+      <li><a href="{{ path('app_home') }}">Accueil</a></li>
+      <li><a href="{{ path('app_car_index') }}">Liste des voitures</a></li>
+      <li><a href="{{ path('app_car_new') }}">Ajouter une voiture</a></li>
 
-                {% if app.user %}
-                    <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
-                {% else %}
-                    <li><a href="{{ path('app_login') }}">Se connecter</a></li>
-                    <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+      <li class="has-submenu">
+        <a href="#">Gestion technique ▾</a>
+        <ul class="submenu">
+          <li><a href="{{ path('app_motorisation_type_index') }}">Types de motorisation</a></li>
+          <li><a href="{{ path('app_performance_type_index') }}">Types de performance</a></li>
+          <li><a href="{{ path('app_categorie_index') }}">Types de catégorie</a></li>
+        </ul>
+      </li>
 
-        <div id="overlay" class="overlay"></div>
-    </header>
+      {% if app.user %}
+        <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+      {% else %}
+        <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+        <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <div id="overlay" class="overlay"></div>
+</header>
+
+{# Place ce script tout en bas de ta page, juste avant </body> #}
+<script src="{{ asset('js/slider-menu.js') }}"></script>
+
 
     <!-- SLIDER -->
     <div class="slider-container">
@@ -119,6 +126,28 @@
     {% block javascripts %}
         <script src="{{ asset('js/slider-menu.js') }}" defer></script>
     {% endblock %}
+    
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('menu');
+
+  burger.addEventListener('click', function () {
+    burger.classList.toggle('active');
+    menu.classList.toggle('active');
+  });
+
+  const submenuLinks = document.querySelectorAll('.has-submenu > a');
+  submenuLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      this.parentElement.classList.toggle('active');
+    });
+  });
+});
+</script>
+
 </body>
 
 </html>

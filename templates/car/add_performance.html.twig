@@ -1,69 +1,56 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-<section class="add-performance">
-  <div class="add-performance__form-wrapper">
-    <h2 class="add-performance__title">
-      <i class="fas fa-tachometer-alt"></i>
-      Ajouter des performances pour {{ car.marque }} {{ car.modele }}
-    </h2>
+<div class="performance-container">
+    <h2>Ajouter des performances pour <br><span>🚗 {{ car.marque }} {{ car.modele }}</span></h2>
 
-    {{ form_start(form, {
-      action: path('app_car_add_performance', { id: car.id }),
-      method: 'POST'
-    }) }}
+    {{ form_start(form, {'attr': {'class': 'performance-form'}}) }}
 
-    <div class="add-performance__options">
-      <div class="add-performance__options-list">
-        {% for child in form.children %}
-          {% if child.vars.name starts with 'performanceType_' %}
-            {% set id = child.vars.name|replace({'performanceType_': ''}) %}
-            <div class="add-performance__option">
-              <label>
-                {{ form_widget(child) }} {{ child.vars.label }}
-              </label>
+    <div class="performance-grid">
+        {% for performanceType in performance_types %}
+            <div class="performance-item">
+                {{ form_row(form['performanceType_' ~ performanceType.id]) }}
+                {{ form_row(form['valeur_' ~ performanceType.id]) }}
             </div>
-          {% endif %}
         {% endfor %}
-      </div>
     </div>
 
-    <div id="performance-values" class="add-performance__values"></div>
-
-    <div class="add-performance__submit-wrapper">
-      <button type="submit" class="add-performance__submit">Ajouter Performance</button>
+    {# Nouveau bouton personnalisé #}
+    <div class="submit-container">
+        <button type="submit" class="submit-btn">Ajouter les performances ></button>
     </div>
 
     {{ form_end(form) }}
-  </div>
-</section>
+
+    <div id="perf-values"></div>
+</div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const performanceSelection = document.querySelectorAll('[id^="performanceType_"]');
-    const performanceValues = document.getElementById('performance-values');
+document.addEventListener('DOMContentLoaded', function () {
+  const checkboxes = document.querySelectorAll('[id^="performanceType_"]');
+  const container = document.getElementById('perf-values');
 
-    performanceSelection.forEach(function (checkbox) {
-      checkbox.addEventListener('change', function () {
-        const performanceId = this.id.replace('performanceType_', '');
-        const existingInput = performanceValues.querySelector(`[data-performance-id="${performanceId}"]`);
-        const label = this.closest('label')?.textContent.trim() || 'Performance';
+  checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      const perfId = this.id.replace('performanceType_', '');
+      const inputId = `input-performance-${perfId}`;
+      const existingInput = document.getElementById(inputId);
 
-        if (this.checked && !existingInput) {
-          const input = document.createElement('input');
-          input.type = 'number';
-          input.name = `performanceCar[valeur_${performanceId}]`;
-          input.placeholder = `Valeur pour ${label}`;
-          input.required = true;
-          input.setAttribute('data-performance-id', performanceId);
-          input.classList.add('add-performance__input', 'visible');
-          performanceValues.appendChild(input);
-        } else if (!this.checked && existingInput) {
-          existingInput.classList.remove('visible');
-          setTimeout(() => existingInput.remove(), 300);
-        }
-      });
+      if (this.checked && !existingInput) {
+        const input = document.createElement('input');
+        input.id = inputId;
+        input.type = 'number';
+        input.name = `performanceCar[valeur_${perfId}]`;
+        input.placeholder = 'Valeur';
+        input.required = true;
+        container.appendChild(input);
+      }
+
+      if (!this.checked && existingInput) {
+        existingInput.remove();
+      }
     });
   });
+});
 </script>
 {% endblock %}

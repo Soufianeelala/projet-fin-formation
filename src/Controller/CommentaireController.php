@@ -35,11 +35,12 @@ class CommentaireController extends AbstractController
 
         return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
     }
-    #[Route('/commentaire/{id}/edit', name: 'app_commentaire_edit')]
+   #[Route('/commentaire/{id}/edit', name: 'app_commentaire_edit', methods: ['GET', 'POST'])]
 public function edit(Commentaire $commentaire, Request $request, EntityManagerInterface $entityManager): Response
 {
     $user = $this->getUser();
 
+    // Vérification des permissions
     if (!$user || ($user !== $commentaire->getUser() && !$this->isGranted('ROLE_ADMIN'))) {
         throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier ce commentaire.");
     }
@@ -48,9 +49,16 @@ public function edit(Commentaire $commentaire, Request $request, EntityManagerIn
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+        // Mettre à jour la date de modification
+        $commentaire->setUpdatedAt(new \DateTimeImmutable());
+        
         $entityManager->flush();
-
-        return $this->redirectToRoute('app_car_show', ['id' => $commentaire->getCar()->getId()]);
+        
+        $this->addFlash('success', 'Commentaire modifié avec succès !');
+        return $this->redirectToRoute('app_car_show', [
+            'id' => $commentaire->getCar()->getId(),
+            '_fragment' => 'comment-' . $commentaire->getId() // Pour scroll vers le commentaire
+        ]);
     }
 
     return $this->render('commentaire/edit.html.twig', [

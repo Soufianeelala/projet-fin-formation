@@ -3,79 +3,92 @@
 {% block main %}
 <section class="car-section">
     <div class="car-form-container">
-        <h2 class="car-title"><i class="fas fa-car"></i>  Ajouter Ta Voiture</h2>
 
-        <form method="post" action="{{ path('app_car_new') }}">
-            {{ form_start(form) }}
+        <div class="car-title-wrapper">
+            <span class="info-icon" title="L’ajout de votre voiture se fait en 3 étapes :
+1. Informations générales
+2. Performances
+3. Images du véhicule">ℹ️</span>
+            <h2 class="car-title"> 🚗Ajouter Ta Voiture</h2>
+        </div>
 
-            {# Champ Marque #}
-            <div class="form-group">
-                {{ form_label(form.marque) }}
-                {{ form_widget(form.marque) }}
-                {{ form_errors(form.marque) }}
-            </div>
+        {{ form_start(form, {'attr': {'class': 'car-form'}}) }}
 
-            {# Champ Modèle #}
-            <div class="form-group">
-                {{ form_label(form.modele) }}
-                {{ form_widget(form.modele) }}
-                {{ form_errors(form.modele) }}
-            </div>
+        <div class="form-group">
+            {{ form_label(form.marque) }}
+            {{ form_widget(form.marque) }}
+            {{ form_errors(form.marque) }}
+        </div>
 
-            {# Champ Matricule #}
-            <div class="form-group">
-                {{ form_label(form.matricule) }}
-                {{ form_widget(form.matricule) }}
-                {{ form_errors(form.matricule) }}
-            </div>
+        <div class="form-group">
+            {{ form_label(form.modele) }}
+            {{ form_widget(form.modele) }}
+            {{ form_errors(form.modele) }}
+        </div>
 
-            {# Champ Année #}
-            <div class="form-group">
-                {{ form_label(form.annee) }}
-                {{ form_widget(form.annee) }}
-                {{ form_errors(form.annee) }}
-            </div>
+        <div class="form-group">
+            {{ form_label(form.matricule) }}
+            {{ form_widget(form.matricule) }}
+            {{ form_errors(form.matricule) }}
+        </div>
 
-            {# Groupe Categorie + Motorisation #}
-            <div class="form-group-inline">
+        <div class="form-group">
+            {{ form_label(form.annee) }}
+            {{ form_widget(form.annee) }}
+            {{ form_errors(form.annee) }}
+        </div>
 
-                <div class="form-group">
-                    {{ form_label(form.categories) }}
-                    {{ form_widget(form.categories) }}
-                    {{ form_errors(form.categories) }}
-                </div>
-
-               <div class="form-group motorisation-options">
-  <span class="group-label">{{ form_label(form.motorisationTypes) }}</span>
-  <div class="options-list">
-    {% for child in form.motorisationTypes %}
-      {# child.vars.value est l’ID, child.vars.data est l’objet, child.vars.label la string #}
-      {% set label = child.vars.label %}
-      <label>
-        {{ form_widget(child) }}
-        {% if label matches '/essence/i' %}
-          <i class="fas fa-gas-pump"></i>
-        {% elseif label matches '/diesel/i' %}
-          <i class="fas fa-oil-can"></i>
-        {% elseif label matches '/électrique|electrique/i' %}
-          <i class="fas fa-bolt"></i>
-        {% else %}
-          <i class="fas fa-car-side"></i>
-        {% endif %}
-        {{ label }}
-      </label>
-    {% endfor %}
-    {{ form_errors(form.motorisationTypes) }}
-  </div>
+       <div class="form-group motorisation-options">
+    <span class="group-label">{{ form_label(form.categories) }}</span>
+    <div class="options-list category-checkboxes">
+        {% for category in form.categories %}
+            {% set label = category.vars.label|lower %}
+            <label class="motorisation-option category-option">
+                {{ form_widget(category, {'attr': {'class': 'category-checkbox'}}) }}
+                {% if 'suv' in label %}
+                    <i class="fas fa-car-side"></i>
+                {% elseif 'sport' in label %}
+                    <i class="fas fa-flag-checkered"></i>
+                {% elseif 'berline' in label %}
+                    <i class="fas fa-taxi"></i>
+                {% elseif 'pickup' in label %}
+                    <i class="fas fa-truck-pickup"></i>
+                {% else %}
+                    <i class="fas fa-car"></i>
+                {% endif %}
+                <span>{{ category.vars.label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+    {{ form_errors(form.categories) }}
 </div>
 
+<div class="form-group motorisation-options">
+    <span class="group-label">{{ form_label(form.motorisationTypes) }}</span>
+    <div class="options-list">
+        {% for child in form.motorisationTypes %}
+            {% set label = child.vars.label %}
+            <label class="motorisation-option">
+                {{ form_widget(child, {'attr': {'class': 'motorisation-checkbox'}}) }}
+                {% if label matches '/essence/i' %}
+                    <i class="fas fa-gas-pump"></i>
+                {% elseif label matches '/diesel/i' %}
+                    <i class="fas fa-oil-can"></i>
+                {% elseif label matches '/électrique|electrique/i' %}
+                    <i class="fas fa-bolt"></i>
+                {% else %}
+                    <i class="fas fa-car-side"></i>
+                {% endif %}
+                <span>{{ label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+    {{ form_errors(form.motorisationTypes) }}
+</div>
 
-            </div>
+        <button type="submit" class="submit-btn">Suivant >></button>
 
-            <button type="submit" class="submit-btn">Suivant</button>
-
-            {{ form_end(form) }}
-        </form>
+        {{ form_end(form) }}
     </div>
 </section>
 {% endblock %}

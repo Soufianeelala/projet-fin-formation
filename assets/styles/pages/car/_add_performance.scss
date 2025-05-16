@@ -1,112 +1,144 @@
-@use '../../base/variables' as v;
+ @use '../../base/variables' as v;
 @use '../../base/fonts' as f;
-@use "sass:color";
+@use '../../utils/mixins' as m;
+@use 'sass:color';
 
-.add-performance {
-  padding: 3rem 1.5rem;
-  background-color: v.$secondary-color;
+.performance-container {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  margin: 4rem auto;
 
-  &__form-wrapper {
-    max-width: 700px;
-    margin: 0 auto;
-    background: #ffffff;
-    padding: 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  h2 {
+    background: radial-gradient(circle, rgba(212, 175, 55, 1) 30%, rgba(229, 231, 235, 1) 96%);
+    color: v.$primary-color;
+    font-size: 2rem;
+    border-radius: 15%;
+    width: fit-content;
+    padding: 0.8rem 1.5rem;
+    margin: auto;
+    margin-top: -2.2rem;
+    text-align: center;
+
+    span {
+        color: #ffffff; 
+        font-weight: bold; 
+        font-size: 2.7rem;
+        border-radius: 44%;
+        background: #1F2937;
+        background: radial-gradient(circle,rgba(31, 41, 55, 1) 98%, rgba(212, 175, 55, 0.9) 86%);
+    }
+}
+
+  .performance-form {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
   }
 
-  &__title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: v.$secondary-color;
-    background-color: v.$primary-color;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-radius: 0.6rem;
-
-    i {
-      color: #007bff;
-    }
-  }
-
-  &__options {
-    margin-bottom: 2rem;
-
-    .add-performance__options-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-
-      .add-performance__option {
-        background: #f1f1f1;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        transition: background 0.3s;
-
-        label {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-weight: 500;
-          cursor: pointer;
-        }
-
-        &:hover {
-          background: #e4e4e4;
-        }
-      }
-    }
-  }
-
-  &__values {
-    display: flex;
-    flex-wrap: wrap;
+  .performance-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    margin-top: 1rem;
 
-    .add-performance__input {
-      flex: 1 1 200px;
-      min-width: 150px;
-      padding: 0.7rem 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0.4rem;
-      font-size: 1rem;
-      transition: border-color 0.3s, opacity 0.3s, transform 0.3s;
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .add-performance__input.visible {
-      opacity: 1;
-      transform: translateY(0);
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr; // 1 colonne en dessous de 768px
     }
   }
 
-  &__submit-wrapper {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 2rem;
-  }
-
-  &__submit {
-    background-color: v.$primary-color;
-    color: #fff;
-    padding: 0.9rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
+  .performance-item {
+    background: #f8f8f8;
+    padding: 1rem;
     border-radius: 0.5rem;
+
+    input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      border: 1px solid #ccc;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+  }
+
+ .submit-container-outside {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+  .submit-btn {
+    background-color: #000;
+    color: #fff;
+    padding: 0.7rem 2rem;
+    border: none;
+    border-radius: 0.3rem;
+    font-weight: bold;
     cursor: pointer;
     transition: background 0.3s;
 
     &:hover {
-      background-color: v.$secondary-color;
-      border-color: v.$secondary-color;
+      background-color: color.adjust(#000, $lightness: 15%);
+
+    }
+  }
+
+
+
+    @media (max-width: 768px) {
+      width: 100%; // Pleine largeur sur petit écran
+    }
+  }
+
+
+
+  #perf-values {
+    margin-top: 2rem;
+
+    input {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      border: 1px solid #ccc;
+    }
+ 
+ 
+  .motorisation-options {
+    .options-list, .category-checkboxes {
+      flex-direction: column;
+    }
+
+    .motorisation-option, .category-option {
+      width: 100%;
+      justify-content: flex-start;
     }
   }
 }
+
+@media (max-width: 480px) {
+  .car-section, .car-edit-section {
+    padding: 1rem;
+  }
+
+  .car-form, .car-edit-form {
+    .form-group {
+      label {
+        font-size: 0.95rem;
+      }
+
+      .form-control {
+        font-size: 0.95rem;
+        padding: 0.6rem 0.9rem;
+      }
+    }
+  }
+ }
+}
+ 

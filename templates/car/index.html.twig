@@ -3,13 +3,13 @@
 {% block title %}Nos véhicules{% endblock %}
 
 {% block main %}
-<h1 class="galerievoiture_title">Galerie des Voitures</h1>
+<h1 class="galerievoiture_title">🚗 Une galerie vivante, par et pour les passionnés</h1>
 
 <form method="get" action="{{ path('app_car_index') }}">
     <div class="filter">
-        <label for="marque" class="filter-label">Marque :</label>
+        {# <label for="marque" class="filter-label">Marque :</label> #}
         <select name="marque" id="marque" class="filter-select">
-            <option value="">Toutes les marques</option>
+            <option value="">choisi votre marque</option>
             {% for marque in marques %}
                 <option value="{{ marque.marque }}" {% if marque.marque == app.request.get('marque') %}selected{% endif %}>
                     {{ marque.marque }}
