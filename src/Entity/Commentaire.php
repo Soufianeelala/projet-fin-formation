@@ -75,24 +75,24 @@ class Commentaire
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getCar(): ?car
+    public function getCar(): ?Car
     {
         return $this->car;
     }
 
-    public function setCar(?car $car): static
+    public function setCar(?Car $car): static
     {
         $this->car = $car;
 

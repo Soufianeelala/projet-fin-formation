@@ -2000,7 +2000,6 @@ a:hover {
 .car-show__details {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 .car-show__title {
   font-size: 2.5rem;

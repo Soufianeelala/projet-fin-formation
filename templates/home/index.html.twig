@@ -36,7 +36,7 @@ Nos véhicules arrivés récemment  </h2>
         <h3 class="car-card__title">{{ car.marque }} {{ car.modele }}</h3>
         <p class="car-card__year">Année : {{ car.annee }}</p>
 
-        <!-- Ajouts corrigés -->
+       <p class="car-card__category">
         Catégories :
                     {{ car.categories|length > 0 
                     ? car.categories|map(c => c.nom)|join(', ') : '—'}}</p>

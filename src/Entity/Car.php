@@ -62,8 +62,9 @@ class Car
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'car')]
-    private Collection $commentaires;
+   #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'car', cascade: ['remove'], orphanRemoval: true)]
+private Collection $commentaires;
+
     
     
     
@@ -204,16 +205,16 @@ class Car
         return $this;
     }
 
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
+    // public function getOwner(): ?User
+    // {
+    //     return $this->owner;
+    // }
 
-    public function setOwner(?User $owner): static
-    {
-        $this->owner = $owner;
-        return $this;
-    }
+    // public function setOwner(?User $owner): static
+    // {
+    //     $this->owner = $owner;
+    //     return $this;
+    // }
 
     /**
      * @return Collection<int, PerformanceCar>
@@ -285,7 +286,6 @@ class Car
     public function removeCommentaire(Commentaire $commentaire): static
     {
         if ($this->commentaires->removeElement($commentaire)) {
-            // set the owning side to null (unless already changed)
             if ($commentaire->getCar() === $this) {
                 $commentaire->setCar(null);
             }

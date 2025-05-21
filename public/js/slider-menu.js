@@ -1,7 +1,6 @@
 // public/js/slider-menu.js
-document.addEventListener("DOMContentLoaded", () => {
     // ===== MENU BURGER =====
-    document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const burger  = document.getElementById("burger");
   const menu    = document.getElementById("menu");
   const overlay = document.getElementById("overlay");
@@ -23,23 +22,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (burger && menu && overlay) {
     burger.addEventListener("click", e => {
-      e.stopPropagation();
+      e.stopPropagation(); // Important : empêche la fermeture immédiate
       toggleMenu();
     });
 
     overlay.addEventListener("click", closeMenu);
 
     document.addEventListener("click", e => {
-      if (!menu.contains(e.target) && !burger.contains(e.target)) {
+      const clickedOutsideMenu = !menu.contains(e.target);
+      const clickedOutsideBurger = !burger.contains(e.target);
+      const isMenuActive = menu.classList.contains("active");
+
+      if (isMenuActive && clickedOutsideMenu && clickedOutsideBurger) {
         closeMenu();
       }
     });
 
     document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeMenu();
+      if (e.key === "Escape") {
+        closeMenu();
+      }
     });
   }
-});
+
 
   
     // ===== SLIDER =====
