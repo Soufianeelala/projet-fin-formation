@@ -1,43 +1,44 @@
 {# templates/car/show.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de {{ car.marque }} {{ car.modele }}{% endblock %}
+{% block title %}
+  Détails de {{ car.marque }} {{ car.modele }}
+{% endblock %}
 
 {% block main %}
 <section class="car-show">
   <div class="car-show__card">
-    {# ——— Galerie de 3 photos ——— #}
+
+    {# ——— Galerie de photos ——— #}
     <div class="car-show__gallery">
       {% for image in car.images|slice(0,3) %}
         <div class="car-show__slide">
-          <img 
-            src="{{ asset(image.filePath) }}"
-            alt="{{ car.marque }} {{ car.modele }}"
-            class="js-thumb"
-          >
+          <img src="{{ asset(image.filePath) }}" alt="{{ car.marque }} {{ car.modele }}" class="js-thumb">
         </div>
       {% else %}
-        <div class="car-show__slide placeholder">
-          Aucune image
-        </div>
+        <div class="car-show__slide placeholder">Aucune image</div>
       {% endfor %}
     </div>
 
-    {# ——— Détails ——— #}
+    {# ——— Informations sur la voiture ——— #}
     <div class="car-show__details">
-      <h2 class="car-show__title">🚗{{ car.marque }} {{ car.modele }}</h2>
+      <h2 class="car-show__title">🚗 {{ car.marque }} {{ car.modele }}</h2>
       <dl class="car-show__list">
         <div><dt><h4>Matricule</h4></dt><dd>{{ car.matricule }}</dd></div>
-        <div><dt><h4>Année</3></dt><dd>{{ car.annee }}</dd></div>
-          <div class="car-card__category">
-          <h4>Catégories : </h4>{{ car.categories|length > 0 
-          ? car.categories|map(c => c.nom)|join(', ') 
-          : '—' 
+        <div><dt><h4>Année</h4></dt><dd>{{ car.annee }}</dd></div>
+
+        <div class="car-card__category">
+          <h4>Catégories :</h4>
+          {{ car.categories|length > 0 
+              ? car.categories|map(c => c.nom)|join(', ') 
+              : '—' 
           }}
-</div>
+        </div>
+
         <div><dt><h4>Motorisations</h4></dt>
           <dd>{{ car.motorisationTypes|map(t => t.nom)|join(', ') ?: '—' }}</dd>
         </div>
+
         <div><dt><h4>Performances</h4></dt>
           <dd>
             <ul class="performance-list">
@@ -49,93 +50,103 @@
             </ul>
           </dd>
         </div>
+
         <div><dt><h4>Propriétaire</h4></dt><dd>{{ car.user.email }}</dd></div>
       </dl>
-{# Affichage des commentaires #}
-{% for commentaire in car.commentaires %}
-  <div id="comment-{{ commentaire.id }}" class="comment mt-3 p-3 border rounded bg-light">
-    <p>
-      <strong>{{ commentaire.user.email }}</strong>
-      le {{ commentaire.createdAt|date('d/m/Y H:i') }}
-      {% if commentaire.updatedAt %}
-        <small>(modifié le {{ commentaire.updatedAt|date('d/m/Y H:i') }})</small>
-      {% endif %}
-    </p>
 
-    {% if editComment and editComment.id == commentaire.id %}
-      {# Formulaire d'édition à la place exacte du commentaire #}
-      {{ form_start(editForm, {
-        'action': path('app_commentaire_edit', {'id': commentaire.id}),
-        'attr': {'class': 'edit-comment-form'}
-      }) }}
-        {{ form_widget(editForm.commentaire) }}
-        <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
-        <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-cancel btn-sm">Annuler</a>
-      {{ form_end(editForm) }}
-    {% else %}
-      <p>{{ commentaire.commentaire }}</p>
-
-      {% if app.user and (app.user == commentaire.user or is_granted('ROLE_ADMIN')) %}
-        <a href="{{ path('app_car_show', {'id': car.id, 'edit': commentaire.id}) }}" class="btn btn-sm btn-warning">
-          <i class="fas fa-edit"></i> Modifier
-        </a>
-        <form method="post" action="{{ path('app_commentaire_delete', {'id': commentaire.id}) }}"
-              onsubmit="return confirm('Supprimer ce commentaire ?');" style="display:inline;">
-          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
-          <button class="btn btn-sm btn-delete">
-            <i class="fas fa-trash-alt"></i> Supprimer
-          </button>
-        </form>
-      {% endif %}
-    {% endif %}
-  </div>
-{% endfor %}
-
-
-{# ****************************** #}
-
-
+      {# ——— Actions (Modifier / Supprimer) ——— #}
       <div class="car-show__actions">
-        
         {% if app.user and (car.user == app.user or is_granted('ROLE_ADMIN')) %}
           <a href="{{ path('app_car_edit', {id: car.id}) }}" class="btn btncarshow-edit">
             <i class="fas fa-edit"></i> Modifier
           </a>
-        <form method="post" action="{{ path('app_car_delete', {'id': car.id}) }}" onsubmit="return confirm('Confirmer la suppression ?');" style="display: inline;">
-          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ car.id) }}">
-          <button type="submit" class="btn btncarshow-delete">
-            <i class="fas fa-trash-alt"></i> Supprimer
-          </button>
-        </form>        {% endif %}
-        <a href="{{ path('app_car_index') }}" class="btn retour-btn">
-                  ← Retour à la liste
-                </a>
+          <form method="post" action="{{ path('app_car_delete', {'id': car.id}) }}"
+                onsubmit="return confirm('Confirmer la suppression ?');" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ car.id) }}">
+            <button type="submit" class="btn btncarshow-delete">
+              <i class="fas fa-trash-alt"></i> Supprimer
+            </button>
+          </form>
+        {% endif %}
+        <a href="{{ path('app_car_index') }}" class="btn retour-btn">← Retour à la liste</a>
       </div>
     </div>
+     {# ——— Commentaires ——— #}
+  <div class="comment-section">
+    {% if app.user %}
+      <h3>Laissez un commentaire :</h3>
+      {{ form_start(commentaireForm, {'action': path('app_car_show', {'id': car.id})}) }}
+        <div class="comment-box">
+          {{ form_widget(commentaireForm.commentaire, {'attr': {'placeholder': 'Écrire ton commentaire...'}}) }}
+          <button type="submit" class="btn btn-primary">Envoyer</button>
+        </div>
+      {{ form_end(commentaireForm) }}
+    {% else %}
+      <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour laisser un commentaire.</p>
+    {% endif %}
+
+      {% for commentaire in car.commentaires %}
+        <div id="comment-{{ commentaire.id }}" class="comment mt-3 p-3 border rounded bg-light">
+          <p>
+            <strong>{{ commentaire.user.email }}</strong>
+            le {{ commentaire.createdAt|date('d/m/Y H:i') }}
+            {% if commentaire.updatedAt %}
+              <small>(modifié le {{ commentaire.updatedAt|date('d/m/Y H:i') }})</small>
+            {% endif %}
+          </p>
+
+          {% if editComment and editComment.id == commentaire.id %}
+            {{ form_start(editForm, {
+              'action': path('app_commentaire_edit', {'id': commentaire.id}),
+              'attr': {'class': 'edit-comment-form'}
+            }) }}
+              {{ form_widget(editForm.commentaire) }}
+              <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+              <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-cancel btn-sm">Annuler</a>
+            {{ form_end(editForm) }}
+          {% else %}
+            <p>{{ commentaire.commentaire }}</p>
+            {% if app.user and (app.user == commentaire.user or is_granted('ROLE_ADMIN')) %}
+              <a href="{{ path('app_car_show', {'id': car.id, 'edit': commentaire.id}) }}" class="btn btn-sm btn-warning">
+                <i class="fas fa-edit"></i> Modifier
+              </a>
+              <form method="post" action="{{ path('app_commentaire_delete', {'id': commentaire.id}) }}"
+                    onsubmit="return confirm('Supprimer ce commentaire ?');" style="display:inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+                <button class="btn btn-sm btn-delete" title="Supprimer ce commentaire">
+                  <i class="fas fa-trash-alt"></i> Supprimer
+                </button>
+              </form>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% else %}
+        <p>Aucun commentaire pour le moment.</p>
+      {% endfor %}
+    </div>
+
+
+
+
   </div>
+
+ 
 </section>
 
-
-
-
-
-
-
-
-
-{# ——— Lightbox overlay ——— #}
+{# ——— Lightbox ——— #}
 <div id="lightbox-overlay" style="
   display:none;
-  position:fixed; top:0; left:0; width:100%; height:100%;
+  position:fixed;
+  top:0; left:0; width:100%; height:100%;
   background:rgba(0,0,0,0.8);
-  justify-content:center; align-items:center;
-  z-index:10000;
-">
+  justify-content:center;
+  align-items:center;
+  z-index:10000;">
   <img id="lightbox-img" src="" alt="" style="
-    max-width:90%; max-height:90%;
+    max-width:90%;
+    max-height:90%;
     border-radius:8px;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
-  ">
+    box-shadow:0 0 20px rgba(0,0,0,0.5);">
 </div>
 {% endblock %}
 

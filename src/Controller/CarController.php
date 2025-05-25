@@ -192,6 +192,14 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
  #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
  public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
  {
+
+
+    if (count($car->getPerformanceCars()) === 0) {
+        $this->addFlash('error', 'Ajoutez d\'abord les performances.');
+        return $this->redirectToRoute('app_car_add_performance', ['id' => $car->getId()]);
+    }
+
+
      $form = $this->createForm(CarImagesType::class);
      $form->handleRequest($request);
 
@@ -250,7 +258,7 @@ public function show(Request $request, Car $car, EntityManagerInterface $entityM
 
         return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
     }
-
+ 
     // ---- Edition d’un commentaire ----
     $editCommentId = $request->query->get('edit'); // récupère ?edit=ID dans l'URL
     $editForm = null;

@@ -61,7 +61,7 @@
   &__details {
     display: flex;
     flex-direction: column;
-    // justify-content:center;
+    justify-content: space-between;
   }
 
   &__title {
@@ -146,7 +146,6 @@
     .btncarshow-edit {
       background-color: #7ce735;
       color: #212529;
-      // width: 30%;
 
       &:hover {
         background-color: color.adjust(#7ce735, $lightness: -10%);
@@ -209,10 +208,11 @@
   }
 
   a {
-    color:v.$primary-color;
+    color: v.$primary-color;
     text-decoration: underline;
   }
 }
+
 .comment-box {
   display: flex;
   flex-direction: column;
@@ -242,6 +242,7 @@
     }
   }
 }
+
 @media (max-width: 768px) {
   .car-show {
     padding: 2rem 1rem;
@@ -266,14 +267,13 @@
 
     &__actions {
       flex-direction: column;
-      align-items: center; /* Centering the buttons */
+      align-items: center;
       justify-content: center;
       display: flex;
-      gap: 1rem; /* Added gap between buttons */
-      width: 100%; /* Ensure full width */
+      gap: 1rem;
+      width: 100%;
 
       .btn {
-        // width: 60%;
         text-align: center;
       }
 
@@ -297,7 +297,6 @@
 
     form {
       .btn {
-        width: 100%;
         text-align: center;
       }
     }
@@ -312,13 +311,10 @@
     }
 
     .btn {
-      width: 100%;
       text-align: center;
     }
   }
 }
-
-
 
 /* Général : style des boutons */
 .btn {
@@ -330,7 +326,7 @@
   border-radius: 0.375rem;
   transition: background-color 0.3s ease, transform 0.2s ease;
   cursor: pointer;
-  text-decoration: none; /* Pour les liens */
+  text-decoration: none;
   margin: 0.25rem;
 }
 
@@ -341,12 +337,12 @@
   border: 1px solid #e0a800;
 
   &:hover {
-      background-color: #e0a800;
-      transform: scale(1.05);
+    background-color: #e0a800;
+    transform: scale(1.05);
   }
 
   .fa-edit {
-      margin-right: 0.5rem; /* Espace entre l'icône et le texte */
+    margin-right: 0.5rem;
   }
 }
 
@@ -354,68 +350,63 @@
 .dangercomment {
   background-color: #dc3545;
   color: white;
-  border: 1px solid #c82333;
+  border: 1px solid color.adjust(#dc3545, $lightness: -10%);
 
   &:hover {
-      background-color: #c82333;
-      transform: scale(1.05);
+    background-color: color.adjust(#dc3545, $lightness: -10%);
+    transform: scale(1.05);
   }
 
   .fa-trash-alt {
-      margin-right: 0.5rem; /* Espace entre l'icône et le texte */
+    margin-right: 0.5rem;
   }
 }
 
-/* Effet de survol */
 .btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Styles spécifiques aux icônes */
 .fas {
-  font-size: 1.2rem; /* Taille des icônes */
+  font-size: 1.2rem;
 }
 
-/* Formulaire de suppression : centrer et styliser le bouton */
-// form {
-//   display: inline-block;
-// }
 .comment {
-    border-left: 3px solid #ddd;
-    padding-left: 15px;
-    margin-bottom: 20px;
-    position: relative;
+  border-left: 3px solid #ddd;
+  padding-left: 15px;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .edit-comment-form {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .edit-comment-form textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #7fb864;
-    border-radius: 4px;
-    background-color: #7ce735;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #7fb864;
+  border-radius: 4px;
+  background-color: #7ce735;
 }
 
 .comment-actions {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .comment small {
-    color: #6c757d;
-    font-size: 0.8em;
+  color: #6c757d;
+  font-size: 0.8em;
 }
+
 .btn-primary {
   background-color: #007bff;
   color: white;
-  border: 1px solid darken(#007bff, 10%);
+  border: 1px solid color.adjust(#007bff, $lightness: -10%);
 
   &:hover {
-    background-color: darken(#007bff, 10%);
+    background-color: color.adjust(#007bff, $lightness: -10%);
     transform: scale(1.05);
   }
 }
@@ -423,10 +414,10 @@
 .btn-cancel {
   background-color: #dc3545;
   color: white;
-  border: 1px solid darken(#dc3545, 10%);
+  border: 1px solid color.adjust(#dc3545, $lightness: -10%);
 
   &:hover {
-    background-color: darken(#dc3545, 10%);
+    background-color: color.adjust(#dc3545, $lightness: -10%);
     transform: scale(1.05);
   }
 }
@@ -434,10 +425,10 @@
 .btn-delete {
   background-color: #dc3545;
   color: white;
-  border: 1px solid darken(#dc3545, 10%);
+  border: 1px solid color.adjust(#dc3545, $lightness: -10%);
 
   &:hover {
-    background-color: darken(#dc3545, 10%);
+    background-color: color.adjust(#dc3545, $lightness: -10%);
     transform: scale(1.05);
   }
 }
