@@ -9,7 +9,7 @@
     <div class="filter">
         {# <label for="marque" class="filter-label">Marque :</label> #}
         <select name="marque" id="marque" class="filter-select">
-            <option value="">choisi votre marque</option>
+            <option value="">choisi votre marque(par defaut)</option>
             {% for marque in marques %}
                 <option value="{{ marque.marque }}" {% if marque.marque == app.request.get('marque') %}selected{% endif %}>
                     {{ marque.marque }}

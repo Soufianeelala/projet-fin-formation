@@ -7,9 +7,10 @@ use App\Entity\Categorie;
 use App\Entity\MotorisationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CarType extends AbstractType
 {
@@ -23,6 +24,11 @@ class CarType extends AbstractType
                 'required' => true,
             ])
             ->add('annee')
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'label' => 'Description',
+                'attr' => ['placeholder' => 'Décrivez la voiture ici...']
+            ])
 
             // ✅ Relation ManyToMany avec Categorie
             ->add('categories', EntityType::class, [
@@ -40,7 +46,7 @@ class CarType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'label' => 'Sélectionnez les motorisations',
-                'by_reference' => false, // Obligatoire pour ManyToMany avec ArrayCollection
+                'by_reference' => false, 
             ]);
     }
 

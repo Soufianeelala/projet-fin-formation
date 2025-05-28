@@ -21,7 +21,7 @@ class PerformanceCar
     #[ORM\JoinColumn(nullable: false)]
     private ?PerformanceType $performanceType = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $valeur = null;
 
     public function getId(): ?int

@@ -35,6 +35,11 @@
         {{ form_widget(form.annee, { attr: { placeholder: 'Année' } }) }}
         {{ form_errors(form.annee) }}
       </div>
+      <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, { attr: { placeholder: 'Ajoute une description de la voiture...' } }) }}
+        {{ form_errors(form.description) }}
+      </div>
 
      <div class="car-edit-form-group">
   <label class="car-edit-group-label">{{ form_label(form.categories) }}</label>

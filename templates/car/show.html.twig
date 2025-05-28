@@ -52,6 +52,10 @@
         </div>
 
         <div><dt><h4>Propriétaire</h4></dt><dd>{{ car.user.email }}</dd></div>
+        <div><dt><h4>Description</h4></dt>
+           <dd>{{ car.description ?: '— Aucune description fournie' }}</dd>
+        </div>
+
       </dl>
 
       {# ——— Actions (Modifier / Supprimer) ——— #}

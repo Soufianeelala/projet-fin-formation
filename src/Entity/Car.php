@@ -205,16 +205,7 @@ private Collection $commentaires;
         return $this;
     }
 
-    // public function getOwner(): ?User
-    // {
-    //     return $this->owner;
-    // }
-
-    // public function setOwner(?User $owner): static
-    // {
-    //     $this->owner = $owner;
-    //     return $this;
-    // }
+   
 
     /**
      * @return Collection<int, PerformanceCar>
@@ -293,4 +284,19 @@ private Collection $commentaires;
 
         return $this;
     }
+
+  #[ORM\Column(type: 'text', nullable: true)]
+private ?string $description = null;
+
+public function getDescription(): ?string
+{
+    return $this->description;
+}
+
+public function setDescription(?string $description): self
+{
+    $this->description = $description;
+    return $this;
+}
+
 }

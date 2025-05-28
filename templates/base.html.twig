@@ -36,8 +36,9 @@
     <ul>
       <li><a href="{{ path('app_home') }}">Accueil</a></li>
       <li><a href="{{ path('app_car_index') }}">Liste des voitures</a></li>
+      {% if app.user %}
       <li><a href="{{ path('app_car_new') }}">Ajouter une voiture</a></li>
-
+      {% endif %}
       <li class="has-submenu">
         <a href="#">Gestion technique ▾</a>
         <ul class="submenu">

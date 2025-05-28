@@ -37,7 +37,11 @@
             {{ form_widget(form.annee) }}
             {{ form_errors(form.annee) }}
         </div>
-
+        <div class="form-group">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'rows': 4, 'placeholder': 'Ex: Ma Lamborghini GTI préparée pour le circuit...'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
        <div class="form-group motorisation-options">
     <span class="group-label">{{ form_label(form.categories) }}</span>
     <div class="options-list category-checkboxes">
