@@ -1711,6 +1711,7 @@ a:hover {
 .motorisation-options .motorisation-option:hover {
   background-color: rgba(31, 41, 55, 0.1);
   border-color: #d4af37;
+  color: aliceblue;
 }
 .motorisation-options .motorisation-option:hover i {
   color: #d4af37;

@@ -120,6 +120,8 @@
           height: 10px;
           border: solid white;
           border-width: 0 2px 2px 0;
+          
+          
         }
       }
     }
@@ -135,6 +137,7 @@
     &:hover {
       background-color: rgba(v.$primary-color, 0.1);
       border-color: v.$secondary-color;
+      color: aliceblue;
 
       i {
         color: v.$secondary-color;
