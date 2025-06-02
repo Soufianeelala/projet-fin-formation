@@ -45,6 +45,8 @@
 
 @use 'pages/contact' as contact;
 
+@use 'pages/A-propos/about-services' as services;
+
 
 // === Layout ===
 @use 'layout/footer' as footer;

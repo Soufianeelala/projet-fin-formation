@@ -33,7 +33,7 @@ final class CarController extends AbstractController
     public function index(CarRepository $carRepository, Request $request): Response
     {  $filter = $request->query->get('filter');
         $marque = $request->query->get('marque');
-        $year = $request->query->get('year'); 
+        $year = $request->query->get('year'); // Si tu veux aussi un filtre par année
     
         // Récupérer les voitures filtrées
         $cars = $carRepository->findAllWithFilter($filter, $year, $marque);
@@ -43,7 +43,7 @@ final class CarController extends AbstractController
         
         return $this->render('car/index.html.twig', [
             'cars' => $cars,
-            'marques' => $marques, 
+            'marques' => $marques, // Passer les marques uniques à la vue
         ]);
     }
     
@@ -62,9 +62,11 @@ final class CarController extends AbstractController
 
     
      if ($form->isSubmitted() && $form->isValid()) {
+        // Associer l'utilisateur connecté à la voiture
         $user = $this->getUser();
-        $car->setUser($user); 
+        $car->setUser($user); // Assure-toi que l'entité Car a bien un champ user
 
+        // Récupérer les types de motorisation depuis le formulaire
         foreach ($car->getMotorisationTypes() as $motorisationType) {
             $existingMotorisation = $entityManager->getRepository(MotorisationType::class)
                 ->findOneBy(['nom' => $motorisationType->getNom()]);
@@ -154,26 +156,27 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-    foreach ($performanceTypes as $performanceType) {
-        $id = $performanceType->getId();
-        $checkbox = $form->get('performanceType_' . $id)->getData();
-        $value = $form->get('valeur_' . $id)->getData();
+        foreach ($performanceTypes as $performanceType) {
+            $id = $performanceType->getId();
 
-        if ($checkbox && $value !== null && $value !== '') {
-            $performanceCar = new PerformanceCar();
-            $performanceCar->setCar($car);
-            $performanceCar->setPerformanceType($performanceType);
-            $performanceCar->setValeur((string) $value);
+            if ($form->get('performanceType_' . $id)->getData()) {
+                $value = $form->get('valeur_' . $id)->getData();
 
-            $entityManager->persist($performanceCar);
+                if ($value) {
+                    $performanceCar = new PerformanceCar();
+                    $performanceCar->setCar($car);
+                    $performanceCar->setPerformanceType($performanceType);
+                    $performanceCar->setValeur((string) $value);
+
+                    $entityManager->persist($performanceCar);
+                }
+            }
         }
+
+        $entityManager->flush();
+        $this->addFlash('success', 'Performances ajoutées avec succès !');
+        return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
     }
-
-    $entityManager->flush();
-    $this->addFlash('success', 'Performances ajoutées avec succès !');
-    return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
-}
-
 
     return $this->render('car/add_performance.html.twig', [
         'car' => $car,
@@ -189,17 +192,12 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
  #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
  public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
  {
-    if (count($car->getPerformanceCars()) === 0) {
-        $this->addFlash('error', 'Ajoutez d\'abord les performances.');
-        return $this->redirectToRoute('app_car_add_performance', ['id' => $car->getId()]);
-    }
      $form = $this->createForm(CarImagesType::class);
      $form->handleRequest($request);
 
      if ($form->isSubmitted() && $form->isValid()) {
          $imageFiles = $form->get('files')->getData() ?? [];
-
-          if (count($imageFiles) === 0) {
+           if (count($imageFiles) === 0) {
             $this->addFlash('error', 'Vous devez ajouter au moins une image.');
             return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
         }
@@ -256,7 +254,7 @@ public function show(Request $request, Car $car, EntityManagerInterface $entityM
 
         return $this->redirectToRoute('app_car_show', ['id' => $car->getId()]);
     }
- 
+
     // ---- Edition d’un commentaire ----
     $editCommentId = $request->query->get('edit'); // récupère ?edit=ID dans l'URL
     $editForm = null;
@@ -328,10 +326,14 @@ public function show(Request $request, Car $car, EntityManagerInterface $entityM
     
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFiles = $form->get('files')->getData() ?? [];
-            $existingImagesCount = count($car->getImages()); // ✅ Nombre d'images déjà enregistrées
+            $existingImagesCount = count($car->getImages()); 
             $totalImagesAfterUpload = $existingImagesCount + count($imageFiles);
+              if (count($imageFiles) === 0) {
+            $this->addFlash('error', 'Vous devez ajouter au moins une image.');
+            return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
+        }
     
-            if ($totalImagesAfterUpload > 3) { // ✅ Change la limite selon ton besoin
+            if ($totalImagesAfterUpload > 3) { 
                 $this->addFlash('error', 'Une voiture ne peut pas avoir plus de 10 images.');
                 return $this->redirectToRoute('app_car_edit_images', ['id' => $car->getId()]);
             }

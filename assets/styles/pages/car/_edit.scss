@@ -30,7 +30,7 @@
   font-size: 2rem;
   border-radius: 15%;
   width: 450px;
-  margin-bottom: 5rem;
+  // margin-bottom: 10rem;
 
   span {
     display: block;
@@ -41,12 +41,13 @@
     border-radius: 44%;
     background: radial-gradient(circle, rgba(31, 41, 55, 1) 98%, rgba(212, 175, 55, 0.9) 86%);
     padding: 0.2rem 0.8rem;
+    // margin-bottom: 2rem;
   }
 }
 
 // Styles du formulaire
 .car-edit-form {
-  margin-top: 1.5rem;
+  margin-top: 4.5rem;
 
   .form-group {
     display: flex;

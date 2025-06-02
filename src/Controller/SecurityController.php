@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Uid\Uuid;
+
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
@@ -42,44 +43,43 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/forgot-password', name: 'app_forgot_password')]
-    public function forgotPassword(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        MailerInterface $mailer
-    ): Response {
-        $form = $this->createForm(ResetPasswordRequestFormType::class);
-        $form->handleRequest($request);
+     public function request(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+{
+    // création du formulaire pour réinitialiser le mot de passe
+    $form=$this->createForm(ResetPasswordRequestFormType::class);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+    if($form->isSubmitted() && $form->isValid()){
+        // récupère le mail du formulaire
+        $email = $form->get("email")->getData();
+        $user = $userRepository->findOneBy(["email"=>$email]);
+        // vérifie si l'utilisateur avec cet email existe
+        if ($user) {
+            // token généré pour 1h
+            $token = Uuid::v4()->toRfc4122();
+            $user->setResetToken($token);
+            $user->setResetTokenExpiresAt((new \DateTime())->modify("+1 hour"));
+            $entityManager->flush();
+            // lien de réinitialisation généré avec le token
+            $resetLink = $this->generateUrl("app_reset_password", ['token'=>$token], UrlGeneratorInterface:: ABSOLUTE_URL);
+            // prépare et envoi l'email
+            $email=(new Email())
+            ->from("noreply@yourdomain.com")
+            ->to($user->getEmail())
+            ->subject ("Réinitialisation de votre mot de passe")
+            ->text("Voici votre lien de réinitialisation : $resetLink");
+            $mailer->send($email);
 
-            if ($user) {
-                $token = Uuid::v4()->toRfc4122();
-                $user->setResetToken($token);
-                $user->setResetTokenExpiresAt(new \DateTimeImmutable('+1 hour'));
-                $entityManager->flush();
-
-                $resetLink = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
-                $emailMessage = (new Email())
-                    ->from('noreply@yourdomain.com')
-                    ->to($user->getEmail())
-                    ->subject('Réinitialisation de votre mot de passe')
-                    ->text("Cliquez ici pour réinitialiser votre mot de passe : $resetLink");
-
-                $mailer->send($emailMessage);
-            }
-
-            $this->addFlash('success', 'Si cet email existe, un lien de réinitialisation a été envoyé.');
-            return $this->redirectToRoute('app_login');
+            $this->addFlash("success", "un email de réinitialisation vous a été envoyé");
+            // redirige l'utilisateur vers la page Se connecter
+            return $this->redirectToRoute("app_login");
         }
-
-        return $this->render('security/forgot_password.html.twig', [
-            'requestForm' => $form->createView()
-        ]);
+        $this->addFlash("error", "Aucun utilisateur trouvé pour cet email.");
     }
-
+    return $this->render('security/reset_password.html.twig', [
+         'reset-password-form' => $form->createView(),
+      ]);
+}
     #[Route('/reset-password/{token}', name: 'app_reset_password')]
     public function resetPassword(
         Request $request,
@@ -87,7 +87,7 @@ class SecurityController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher,UserRepository $userRepository
     ): Response {
-        $user = $entityManager->getRepository(User::class)->findOneBy(['resetToken' => $token]);
+        $user = $userRepository->findOneBy(['resetToken' => $token]);
 
         if (!$user || $user->getResetTokenExpiresAt() < new \DateTimeImmutable()) {
             $this->addFlash('danger', 'Ce lien est invalide ou a expiré.');
@@ -98,8 +98,8 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+            $password = $form->get('plainPassword')->getData();
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
             $user->setPassword($hashedPassword);
             $user->setResetToken(null);

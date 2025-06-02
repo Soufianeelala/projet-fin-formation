@@ -2,6 +2,20 @@
 @use '../../base/fonts' as f;
 @use 'sass:color';
 
+.car-show__slogan {
+   text-align: center;
+  // font-size: 2rem;
+  font-family: f.$font-serif;
+  // margin-bottom: 2rem;
+  background: #1F2937;
+  background: radial-gradient(circle,rgba(31, 41, 55, 1) 64%, rgba(212, 175, 55, 1) 100%);
+  color: v.$text-light;
+  padding: 1rem;
+  border-radius: 8px;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  // margin-top: 2rem;
+}
+
 .car-show {
   padding: 4rem 2rem;
   background-color: v.$secondary-color;
@@ -61,7 +75,7 @@
   &__details {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content:first baseline;
   }
 
   &__title {
