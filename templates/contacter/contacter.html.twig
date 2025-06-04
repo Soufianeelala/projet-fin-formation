@@ -33,17 +33,17 @@
 
     <h1>Contactez-nous</h1>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.sujet) }}
-        {{ form_row(form.message) }}
-        {{ form_row(form.submit) }}
-    {{ form_end(form) }}
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
+    {{ form_row(form.message) }}
+    {{ form_row(form.submit) }}
+{{ form_end(form) }}
 {% endblock %}
 
 
