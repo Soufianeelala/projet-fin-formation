@@ -109,12 +109,14 @@
         padding: 15px;
         
         .filter-select, .filter-submit {
-            width: 100%;
+            width: 40%;
         }
 
         .filter-buttons {
             flex-direction: column;
             gap: 15px;
+            width: 40%;
+            
         }
     }
 }

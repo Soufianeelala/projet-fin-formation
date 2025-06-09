@@ -22,6 +22,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Ramsey\Uuid\Uuid;
+
 // use Symfony\Component\DependencyInjection\Loader\Configurator\request;
 
 
@@ -62,9 +64,8 @@ final class CarController extends AbstractController
 
     
      if ($form->isSubmitted() && $form->isValid()) {
-        // Associer l'utilisateur connecté à la voiture
         $user = $this->getUser();
-        $car->setUser($user); // Assure-toi que l'entité Car a bien un champ user
+        $car->setUser($user); 
 
         // Récupérer les types de motorisation depuis le formulaire
         foreach ($car->getMotorisationTypes() as $motorisationType) {
@@ -192,6 +193,15 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
  #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
  public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
  {
+    
+     // Vérifier si la voiture a des performances
+    $performances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
+
+    if (count($performances) === 0) {
+        $this->addFlash('error', 'Vous devez d’abord ajouter au moins une performance avant d’ajouter des images.');
+        return $this->redirectToRoute('app_car_add_performance', ['id' => $car->getId()]);
+    }
+
      $form = $this->createForm(CarImagesType::class);
      $form->handleRequest($request);
 
@@ -209,7 +219,7 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
 
          foreach ($imageFiles as $file) {
              if ($file instanceof UploadedFile) {
-                 $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                 $fileName = Uuid::uuid4()->toString() . '.' . $file->guessExtension();
                  $file->move('uploads/cars', $fileName);
 
                  $image = new Image();
@@ -340,7 +350,7 @@ public function show(Request $request, Car $car, EntityManagerInterface $entityM
     
             foreach ($imageFiles as $file) {
                 if ($file instanceof UploadedFile) {
-                    $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                    $fileName = Uuid::uuid4()->toString() . '.' . $file->guessExtension();
                     $file->move('uploads/cars', $fileName);
     
                     $image = new Image();
@@ -391,7 +401,7 @@ public function delete(Request $request, Car $car, EntityManagerInterface $entit
     if (!$this->isCsrfTokenValid('delete' . $car->getId(), $request->request->get('_token'))) {
         throw new \Exception('Token CSRF invalide');
     }
-
+// Supprime physiquement le fichier du disque
     foreach ($car->getImages() as $image) {
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/' . $image->getFilePath();
         if (file_exists($imagePath)) {

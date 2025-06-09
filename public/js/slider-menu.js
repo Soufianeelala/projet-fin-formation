@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     function nextSlide() { showSlide((currentIndex + 1) % slides.length); }
     function prevSlide() { showSlide((currentIndex + slides.length - 1) % slides.length); }
-    function startAuto() { autoSlide = setInterval(nextSlide, 4000); }
+    function startAuto() { autoSlide = setInterval(nextSlide, 3000); }
     function stopAuto()  { clearInterval(autoSlide); }
   
     document.querySelector(".next")?.addEventListener("click", nextSlide);

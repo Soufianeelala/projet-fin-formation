@@ -135,8 +135,8 @@ a:hover {
 
 .slide {
   width: 100%;
-  opacity: 0.5;
-  transform: scale(1.5) translateX(5vw);
+  opacity: 0.3;
+  transform: scale(1.7) translateX(5vw);
   transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 .slide.active {
@@ -203,6 +203,12 @@ a:hover {
   }
 }
 @media (max-width: 768px) {
+  .slider-container {
+    background-position: center bottom;
+    background-size: 120%;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
   .slide {
     transform: scale(1.2) translateX(2vw);
   }
@@ -219,6 +225,12 @@ a:hover {
   }
 }
 @media (max-width: 480px) {
+  .slider-container {
+    background-position: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-size: 180%;
+  }
   .slide {
     transform: scale(1.1) translateX(0);
   }
@@ -1284,11 +1296,12 @@ a:hover {
     padding: 15px;
   }
   .filter .filter-select, .filter .filter-submit {
-    width: 100%;
+    width: 40%;
   }
   .filter .filter-buttons {
     flex-direction: column;
     gap: 15px;
+    width: 40%;
   }
 }
 
