@@ -193,7 +193,6 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
  #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
  public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
  {
-    
      // Vérifier si la voiture a des performances
     $performances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
 
