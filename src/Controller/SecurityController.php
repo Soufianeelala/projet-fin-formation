@@ -1,4 +1,5 @@
 <?php
+// src/Controller/SecurityController.php
 
 namespace App\Controller;
 
@@ -27,65 +28,66 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
-
         return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error,
+            'last_username' => $authenticationUtils->getLastUsername(),
+            'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
-        throw new \LogicException('Cette méthode peut rester vide - elle est interceptée par le firewall de Symfony.');
+        throw new \LogicException('Intercepté par le firewall.');
     }
 
     #[Route('/forgot-password', name: 'app_forgot_password')]
-     public function request(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
-{
-    // création du formulaire pour réinitialiser le mot de passe
-    $form=$this->createForm(ResetPasswordRequestFormType::class);
-    $form->handleRequest($request);
+    public function request(
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $email = $request->request->get('email');
+            $submittedToken = $request->request->get('_token');
 
-    if($form->isSubmitted() && $form->isValid()){
-        // récupère le mail du formulaire
-        $email = $form->get("email")->getData();
-        $user = $userRepository->findOneBy(["email"=>$email]);
-        // vérifie si l'utilisateur avec cet email existe
-        if ($user) {
-            // token généré pour 1h
-            $token = Uuid::v4()->toRfc4122();
-            $user->setResetToken($token);
-            $user->setResetTokenExpiresAt((new \DateTime())->modify("+1 hour"));
-            $entityManager->flush();
-            // lien de réinitialisation généré avec le token
-            $resetLink = $this->generateUrl("app_reset_password", ['token'=>$token], UrlGeneratorInterface:: ABSOLUTE_URL);
-            // prépare et envoi l'email
-            $email=(new Email())
-            ->from("noreply@yourdomain.com")
-            ->to($user->getEmail())
-            ->subject ("Réinitialisation de votre mot de passe")
-            ->text("Voici votre lien de réinitialisation : $resetLink");
-            $mailer->send($email);
+            if ($this->isCsrfTokenValid('forgot_password', $submittedToken)) {
+                $user = $userRepository->findOneBy(['email' => $email]);
 
-            $this->addFlash("success", "un email de réinitialisation vous a été envoyé");
-            // redirige l'utilisateur vers la page Se connecter
-            return $this->redirectToRoute("app_login");
+                if ($user) {
+                    $token = Uuid::v4()->toRfc4122();
+                    $user->setResetToken($token);
+                    $user->setResetTokenExpiresAt(new \DateTimeImmutable('+1 hour'));
+                    $entityManager->flush();
+
+                    $resetLink = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                    $email = (new Email())
+                        ->from('noreply@yourdomain.com')
+                        ->to($user->getEmail())
+                        ->subject('Réinitialisation de votre mot de passe')
+                        ->text("Cliquez sur ce lien pour réinitialiser votre mot de passe : $resetLink");
+
+                    $mailer->send($email);
+
+                    $this->addFlash('success', 'Un email de réinitialisation a été envoyé.');
+                    return $this->redirectToRoute('app_login');
+                }
+
+                $this->addFlash('error', 'Aucun utilisateur trouvé pour cet email.');
+            }
         }
-        $this->addFlash("error", "Aucun utilisateur trouvé pour cet email.");
+
+        return $this->render('security/forgot_password.html.twig');
     }
-    return $this->render('security/reset_password.html.twig', [
-         'reset-password-form' => $form->createView(),
-      ]);
-}
+
     #[Route('/reset-password/{token}', name: 'app_reset_password')]
     public function resetPassword(
         Request $request,
         string $token,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher,UserRepository $userRepository
+        UserPasswordHasherInterface $passwordHasher,
+        UserRepository $userRepository
     ): Response {
         $user = $userRepository->findOneBy(['resetToken' => $token]);
 
@@ -98,12 +100,13 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $form->get('plainPassword')->getData();
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $plainPassword = $form->get('plainPassword')->getData();
+            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
 
             $user->setPassword($hashedPassword);
             $user->setResetToken(null);
             $user->setResetTokenExpiresAt(null);
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Mot de passe mis à jour avec succès.');

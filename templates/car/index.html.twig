@@ -18,8 +18,10 @@
         </select>
 
         <div class="filter-buttons">
-            <a href="{{ path('app_car_index', {'filter': 'date_desc'}) }}" class="filter-link">Trier par année décroissante</a>
-            <a href="{{ path('app_car_index', {'filter': 'date_asc'}) }}" class="filter-link">Trier par année croissante</a>
+           {# Génère l'URL avec tous les filtres actuels + le tri #}
+            <a href="{{ path('app_car_index', app.request.query.all | merge({'filter': 'date_desc'})) }}" class="filter-link">Trier par année décroissante</a>
+            <a href="{{ path('app_car_index', app.request.query.all | merge({'filter': 'date_asc'})) }}" class="filter-link">Trier par année croissante</a>
+
         </div>
 
         <button type="submit" class="filter-submit">Filtrer</button>
