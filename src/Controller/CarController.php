@@ -94,6 +94,9 @@ final class CarController extends AbstractController
 #[Route('/{id}/add-performance', name: 'app_car_add_performance')]
 public function addPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
 {
+        if ($this->getUser() !== $car->getUser()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à ajouter les performances à cette voiture.');
+    }
     $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
 
     $form = $this->createForm(PerformanceCarType::class, new PerformanceCar(), [
@@ -137,6 +140,10 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
  #[Route('/{id}/add-images', name: 'app_car_add_images', methods: ['GET', 'POST'])]
  public function addImages(Request $request, Car $car, EntityManagerInterface $entityManager): Response
  {
+
+    if ($this->getUser() !== $car->getUser()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à ajouter des images à cette voiture.');
+    }
      // Vérifier si la voiture a des performances
     $performances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
 
