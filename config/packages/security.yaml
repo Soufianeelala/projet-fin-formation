@@ -49,6 +49,33 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        # Routes liées aux voitures à protéger (création, édition, suppression, ajout d'images/perfs)
+        - { path: ^/car/new, roles: ROLE_USER }
+        - { path: ^/car/\d+/edit, roles: ROLE_USER }
+        - { path: ^/car/\d+/edit-images, roles: ROLE_USER }
+        - { path: ^/car/\d+/edit-details, roles: ROLE_USER }
+        - { path: ^/car/\d+/add-performance, roles: ROLE_USER }
+        - { path: ^/car/\d+/add-images, roles: ROLE_USER }
+        - { path: ^/car/\d+/delete, roles: ROLE_USER }
+        - { path: ^/car/image/\d+/delete, roles: ROLE_USER }
+        # Protection des routes liées aux commentaires
+        - { path: ^/commentaire/\d+/edit, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/commentaire/\d+/delete, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/car/\d+/commentaire, roles: [ROLE_USER, ROLE_ADMIN] }
+         #  Protection des types de motorisation
+        - { path: ^/motorisation/type/new, roles: ROLE_ADMIN }
+        - { path: ^/motorisation/type/\d+/edit, roles: ROLE_ADMIN }
+        - { path: ^/motorisation/type/\d+$, roles: ROLE_ADMIN, methods: [POST] }
+         #  Protection des types de categorie
+        - { path: ^/categorie/new, roles: ROLE_ADMIN }
+        - { path: ^/categorie/\d+/edit, roles: ROLE_ADMIN }
+        - { path: ^/categorie/\d+$, roles: ROLE_ADMIN, methods: [POST] }
+         #  Protection des types de performance
+        - { path: ^/performance/type/new, roles: ROLE_ADMIN }
+        - { path: ^/performance/type/\d+/edit, roles: ROLE_ADMIN }
+        - { path: ^/performance/type/\d+$, roles: ROLE_ADMIN, methods: [POST] }
+
+
 
 when@test:
     security:

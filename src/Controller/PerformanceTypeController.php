@@ -23,6 +23,7 @@ final class PerformanceTypeController extends AbstractController{
     }
 
     #[Route('/new', name: 'app_performance_type_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $performanceType = new PerformanceType();
@@ -74,7 +75,7 @@ final class PerformanceTypeController extends AbstractController{
     #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, PerformanceType $performanceType, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$performanceType->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$performanceType->getId(), $request->request->get('_token'))) {
             $entityManager->remove($performanceType);
             $entityManager->flush();
         }

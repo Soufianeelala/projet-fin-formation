@@ -73,7 +73,7 @@ public function delete(Request $request, Commentaire $commentaire, EntityManager
 
     // Autoriser uniquement l'auteur ou l'admin
     if (!$user || ($commentaire->getUser() !== $user && !$this->isGranted('ROLE_ADMIN'))) {
-        throw $this->createAccessDeniedException();
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer ce commentaire.");
     }
 
     // Vérifier token CSRF

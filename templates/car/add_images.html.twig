@@ -1,38 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-<section class="add-images">
-  <div class="add-images__form-wrapper">
-    <h2 class="add-images__title">
-      <i class="fas fa-image"></i>
-      Ajouter <strong>3 photos claires</strong> de votre véhicule
-      <br>
-      <span>🚗 {{ car.marque }} {{ car.modele }}</span>
-      <br>
-      <small>
-        <strong>Conseil :</strong> Ajoutez <u>1 photo de l’intérieur</u> et <u>2 photos de l’extérieur</u> (avant et arrière).
-      </small>
-    </h2>
+  <section class="add-images">
+    <div class="add-images__form-wrapper">
+      <h2 class="add-images__title">
+        <i class="fas fa-image"></i>
+        Ajouter <strong>3 photos claires</strong> de votre véhicule
+        <br>
+        <span>🚗 {{ car.marque }} {{ car.modele }}</span>
+        <br>
+        <small>
+          <strong>Conseil :</strong> Ajoutez <u>1 photo de l’intérieur</u> et <u>2 photos de l’extérieur</u> (avant et arrière).
+        </small>
+      </h2>
 
-    {% for message in app.flashes('error') %}
-      <div class="add-images__error">{{ message }}</div>
-    {% endfor %}
+      {% for message in app.flashes('error') %}
+        <div class="add-images__error">{{ message }}</div>
+      {% endfor %}
 
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+      {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
-    <div class="add-images__upload">
-      <label>
-        {{ form_label(form.files) }}
-        <span class="info-icon" title="Ajoutez 3 photos : 1 de l’intérieur (habitacle) et 2 de l’extérieur (avant et arrière).">ℹ️</span>
-      </label>
-      {{ form_widget(form.files) }}
+      <div class="add-images__upload">
+        <label>
+          {{ form_label(form.files) }}
+          <span class="info-icon" title="Ajoutez 3 photos : 1 de l’intérieur (habitacle) et 2 de l’extérieur (avant et arrière).">ℹ️</span>
+        </label>
+        {{ form_widget(form.files) }}
+      </div>
+
+      <div class="add-images__submit-wrapper">
+        <button type="submit" class="submit-btn">Ajouter des images</button>
+      </div>
+
+      {{ form_end(form) }}
     </div>
-
-    <div class="add-images__submit-wrapper">
-      <button type="submit" class="submit-btn">Ajouter des images</button>
-    </div>
-
-    {{ form_end(form) }}
-  </div>
-</section>
+  </section>
 {% endblock %}

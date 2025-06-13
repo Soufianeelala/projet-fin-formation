@@ -1,55 +1,55 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-<div class="performance-container">
-    <h2>Ajouter des performances pour <br><span>🚗 {{ car.marque }} {{ car.modele }}</span></h2>
+  <div class="performance-container">
+      <h2>Ajouter des performances pour <br><span>🚗 {{ car.marque }} {{ car.modele }}</span></h2>
 
-    {{ form_start(form, {'attr': {'class': 'performance-form'}}) }}
+      {{ form_start(form, {'attr': {'class': 'performance-form'}}) }}
 
-    <div class="performance-grid">
-        {% for performanceType in performance_types %}
-            <div class="performance-item">
-                {{ form_row(form['performanceType_' ~ performanceType.id]) }}
-                {{ form_row(form['valeur_' ~ performanceType.id]) }}
-            </div>
-        {% endfor %}
-    </div>
+      <div class="performance-grid">
+          {% for performanceType in performance_types %}
+              <div class="performance-item">
+                  {{ form_row(form['performanceType_' ~ performanceType.id]) }}
+                  {{ form_row(form['valeur_' ~ performanceType.id]) }}
+              </div>
+          {% endfor %}
+      </div>
 
-    <div class="submit-container">
-        <button type="submit" class="submit-btn">Ajouter les performances ></button>
-    </div>
+      <div class="submit-container">
+          <button type="submit" class="submit-btn">Ajouter les performances ></button>
+      </div>
 
-    {{ form_end(form) }}
+      {{ form_end(form) }}
 
-    <div id="perf-values"></div>
-</div>
+      <div id="perf-values"></div>
+  </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const checkboxes = document.querySelectorAll('[id^="performanceType_"]');
-  const container = document.getElementById('perf-values');
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('[id^="performanceType_"]');
+    const container = document.getElementById('perf-values');
 
-  checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-      const perfId = this.id.replace('performanceType_', '');
-      const inputId = `input-performance-${perfId}`;
-      const existingInput = document.getElementById(inputId);
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener('change', function () {
+        const perfId = this.id.replace('performanceType_', '');
+        const inputId = `input-performance-${perfId}`;
+        const existingInput = document.getElementById(inputId);
 
-      if (this.checked && !existingInput) {
-        const input = document.createElement('input');
-        input.id = inputId;
-        input.type = 'number';
-        input.name = `performanceCar[valeur_${perfId}]`;
-        input.placeholder = 'Valeur';
-        input.required = true;
-        container.appendChild(input);
-      }
+        if (this.checked && !existingInput) {
+          const input = document.createElement('input');
+          input.id = inputId;
+          input.type = 'number';
+          input.name = `performanceCar[valeur_${perfId}]`;
+          input.placeholder = 'Valeur';
+          input.required = true;
+          container.appendChild(input);
+        }
 
-      if (!this.checked && existingInput) {
-        existingInput.remove();
-      }
+        if (!this.checked && existingInput) {
+          existingInput.remove();
+        }
+      });
     });
   });
-});
-</script>
+  </script>
 {% endblock %}

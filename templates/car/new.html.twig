@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{# 🧩 Bloc principal de la page #}
 {% block main %}
 <section class="car-section">
     <div class="car-form-container">
-
+        {# 🎯 Titre de la page + info tooltip #}
         <div class="car-title-wrapper">
             <span class="info-icon" title="L’ajout de votre voiture se fait en 3 étapes :
 1. Informations générales
@@ -11,7 +12,7 @@
 3. Images du véhicule">ℹ️</span>
             <h2 class="car-title"> 🚗Ajouter Ta Voiture</h2>
         </div>
-
+        {# 🧾 Début du formulaire Symfony avec une classe CSS personnalisée #}
         {{ form_start(form, {'attr': {'class': 'car-form'}}) }}
 
         <div class="form-group">
@@ -37,61 +38,68 @@
             {{ form_widget(form.annee) }}
             {{ form_errors(form.annee) }}
         </div>
+
         <div class="form-group">
             {{ form_label(form.description) }}
             {{ form_widget(form.description, {'attr': {'rows': 4, 'placeholder': 'Ex: Ma Lamborghini GTI préparée pour le circuit...'}}) }}
             {{ form_errors(form.description) }}
         </div>
-       <div class="form-group motorisation-options">
-    <span class="group-label">{{ form_label(form.categories) }}</span>
-    <div class="options-list category-checkboxes">
-        {% for category in form.categories %}
-            {% set label = category.vars.label|lower %}
-            <label class="motorisation-option category-option">
-                {{ form_widget(category, {'attr': {'class': 'category-checkbox'}}) }}
-                {% if 'suv' in label %}
-                    <i class="fas fa-car-side"></i>
-                {% elseif 'sport' in label %}
-                    <i class="fas fa-flag-checkered"></i>
-                {% elseif 'berline' in label %}
-                    <i class="fas fa-taxi"></i>
-                {% elseif 'pickup' in label %}
-                    <i class="fas fa-truck-pickup"></i>
-                {% else %}
-                    <i class="fas fa-car"></i>
-                {% endif %}
-                <span>{{ category.vars.label }}</span>
-            </label>
-        {% endfor %}
-    </div>
-    {{ form_errors(form.categories) }}
-</div>
+        {# 🗂️ Champ : Catégories (SUV, Pickup, etc.) avec icônes dynamiques #}
+        <div class="form-group motorisation-options">
+            <span class="group-label">{{ form_label(form.categories) }}</span>
+            <div class="options-list category-checkboxes">
+                {% for category in form.categories %}
+                    {% set label = category.vars.label|lower %}
+                    <label class="motorisation-option category-option">
+                        {{ form_widget(category, {'attr': {'class': 'category-checkbox'}}) }}
+                        {# Icônes selon le type de catégorie #}
+                        {% if 'suv' in label %}
+                            <i class="fas fa-car-side"></i>
+                        {% elseif 'sport' in label %}
+                            <i class="fas fa-flag-checkered"></i>
+                        {% elseif 'berline' in label %}
+                            <i class="fas fa-taxi"></i>
+                        {% elseif 'pickup' in label %}
+                            <i class="fas fa-truck-pickup"></i>
+                        {% else %}
+                            <i class="fas fa-car"></i>
+                        {% endif %}
+                        <span>{{ category.vars.label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.categories) }}
+        </div>
 
-<div class="form-group motorisation-options">
-    <span class="group-label">{{ form_label(form.motorisationTypes) }}</span>
-    <div class="options-list">
-        {% for child in form.motorisationTypes %}
-            {% set label = child.vars.label %}
-            <label class="motorisation-option">
-                {{ form_widget(child, {'attr': {'class': 'motorisation-checkbox'}}) }}
-                {% if label matches '/essence/i' %}
-                    <i class="fas fa-gas-pump"></i>
-                {% elseif label matches '/diesel/i' %}
-                    <i class="fas fa-oil-can"></i>
-                {% elseif label matches '/électrique|electrique/i' %}
-                    <i class="fas fa-bolt"></i>
-                {% else %}
-                    <i class="fas fa-car-side"></i>
-                {% endif %}
-                <span>{{ label }}</span>
-            </label>
-        {% endfor %}
-    </div>
-    {{ form_errors(form.motorisationTypes) }}
-</div>
+        {# ⛽ Champ : Types de motorisation (essence, diesel, électrique) avec icônes #}
+        <div class="form-group motorisation-options">
+            <span class="group-label">{{ form_label(form.motorisationTypes) }}</span>
+            <div class="options-list">
+                {% for child in form.motorisationTypes %}
+                    {% set label = child.vars.label %}
+                    <label class="motorisation-option">
+                        {{ form_widget(child, {'attr': {'class': 'motorisation-checkbox'}}) }}
+                        {# Icônes selon type de carburant #}
+                        {% if label matches '/essence/i' %}
+                            <i class="fas fa-gas-pump"></i>
+                        {% elseif label matches '/diesel/i' %}
+                            <i class="fas fa-oil-can"></i>
+                        {% elseif label matches '/électrique|electrique/i' %}
+                            <i class="fas fa-bolt"></i>
+                        {% else %}
+                            <i class="fas fa-car-side"></i>
+                        {% endif %}
+                        <span>{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.motorisationTypes) }}
+        </div>
 
+        {# ✅ Bouton de validation - passe à l’étape suivante #}
         <button type="submit" class="submit-btn">Suivant >></button>
 
+        {# 🧾 Fin du formulaire Symfony #}
         {{ form_end(form) }}
     </div>
 </section>

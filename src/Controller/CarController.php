@@ -79,8 +79,6 @@ final class CarController extends AbstractController
                 $car->addMotorisationType($existingMotorisation);
             }
         }
-
-         
          $entityManager->persist($car);
          $entityManager->flush();
 
@@ -92,58 +90,6 @@ final class CarController extends AbstractController
          'form' => $form->createView(),
      ]);
  }
-
-
-// Page 2 : Ajouter des performances
-// src/Controller/CarController.php
-
-// #[Route('/{id}/add-performance', name: 'app_car_add_performance')]
-// public function addPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
-// {
-//     // Récupérer tous les types de performance disponibles
-//     $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
-
-//     // Créer le formulaire
-//     $form = $this->createForm(PerformanceCarType::class, null, [
-//         'performance_types' => $performanceTypes,
-//     ]);
-
-//     $form->handleRequest($request);
-
-//     if ($form->isSubmitted() && $form->isValid()) {
-//         // Traiter les types de performance et les valeurs saisies
-//         foreach ($performanceTypes as $performanceType) {
-//             $checkboxField = 'performanceType_' . $performanceType->getId();
-//             $valueField = 'valeur' . $performanceType->getId();
-
-//             // Vérifier si la case est cochée
-//             if ($form->has($checkboxField) && $form->get($checkboxField)->getData()) {
-//                 $value = $form->has($valueField) ? $form->get($valueField)->getData() : null;
-
-//                 if (!empty($value)) {
-//                     // Créer un nouvel objet PerformanceCar
-//                     $performanceCar = new PerformanceCar();
-//                     $performanceCar->setCar($car);
-//                     $performanceCar->setPerformanceType($performanceType);
-//                     $performanceCar->setValeur($value);
-
-//                     $entityManager->persist($performanceCar);
-//                 }
-//             }
-//         }
-
-//         // Sauvegarder les performances
-//         $entityManager->flush();
-
-//         $this->addFlash('success', 'Performances ajoutées avec succès !');
-//         return $this->redirectToRoute('app_car_add_images', ['id' => $car->getId()]);
-//     }
-
-//     return $this->render('car/add_performance.html.twig', [
-//         'car' => $car,
-//         'form' => $form->createView(),
-//     ]);
-// }
 
 #[Route('/{id}/add-performance', name: 'app_car_add_performance')]
 public function addPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
@@ -185,8 +131,6 @@ public function addPerformance(Car $car, Request $request, EntityManagerInterfac
         'performance_types' => $performanceTypes,
     ]);
 }
-
-
 
 
  // Page 3 : Ajouter des images
@@ -416,8 +360,13 @@ public function delete(Request $request, Car $car, EntityManagerInterface $entit
 }
 
   #[Route('/{id}/edit-details', name: 'app_car_edit_details')]
-public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager): Response
+public function editPerformance(Car $car, Request $request, EntityManagerInterface $entityManager, Security $security): Response
 {
+         $user = $security->getUser();
+
+        if ($user !== $car->getUser() && !$security->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier les images de cette voiture.");
+        }
     $performanceTypes = $entityManager->getRepository(PerformanceType::class)->findAll();
     $existingPerformances = $entityManager->getRepository(PerformanceCar::class)->findBy(['car' => $car]);
 
